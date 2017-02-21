@@ -4,13 +4,14 @@
 #include "details/operation_macros.hpp"
 
 #include "details/define_property.hpp"
+#include "meta/tuple.hpp"
 
 #define PTY_DETAILS_APPLY_TO_ARITHMETIC_BINARY_MUTABLE_OPERATORS(fun) \
 	fun(+=, plus_assign)\
 	fun(-=, minus_assign)\
 	fun(*=, multiply_assign)\
 	fun(/=, divide_assign)\
-	fun(%=, modulo_assign)
+	fun(%=, modulus_assign)
 
 #define PTY_DETAILS_APPLY_TO_ARITHMETIC_BINARY_CONST_OPERATORS(fun) \
 	fun(+, plus)\
@@ -44,6 +45,7 @@ namespace pty {
 
 	PTY_DETAILS_APPLY_TO_ARITHMETIC_TRANSITIVE_OPERATORS(PTY_DETAILS_DEFINE_TRANSITIVE_OPERATOR)
 
+	typedef pty::tuple<pty::plus, pty::minus, pty::multiplies, pty::divides, pty::modulus, pty::plus_assign, pty::minus_assign, pty::multiply_assign, pty::divide_assign, pty::modulus_assign> arithmetic_operations;
 }
 
 

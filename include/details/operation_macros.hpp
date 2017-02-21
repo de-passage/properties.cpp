@@ -3,7 +3,7 @@
 
 #define PTY_DETAILS_DEFINE_BINARY_OPERATOR(sym, op, const_q) \
 	template<class T> \
-		inline constexpr auto operator sym (const T& t) const_q{\
+		inline constexpr auto operator sym (const T& t) const_q -> decltype(operator_base(op(), t)) {\
 			return operator_base(op(),t);\
 		}
 
