@@ -2,62 +2,55 @@
 #define GUARD_PTY_ARITHMETIC_HPP__
 
 #include "details/operation_macros.hpp"
-#include "details/aritmetic_operations.hpp"
-#include "details/prevent_duplication.hpp"
 
-#define PTY_DETAILS_LIST_ARITH_BIN_OPS(fun) \
+#include "details/define_property.hpp"
+
+#define PTY_DETAILS_APPLY_TO_ARITHMETIC_BINARY_MUTABLE_OPERATORS(fun) \
 	fun(+=, plus_assign)\
 	fun(-=, minus_assign)\
 	fun(*=, multiply_assign)\
 	fun(/=, divide_assign)\
 	fun(%=, modulo_assign)
 
-#define PTY_DETAILS_LIST_CONST_ARITH_BIN_OPS(fun) \
+#define PTY_DETAILS_APPLY_TO_ARITHMETIC_BINARY_CONST_OPERATORS(fun) \
 	fun(+, plus)\
 	fun(-, minus)\
 	fun(*, multiplies)\
 	fun(/, divides)\
 	fun(%, modulus)
 
-#define PTY_DETAILS_LIST_CONST_ARITHMETIC_UNARY_OPERATORS(fun) \
-	fun(-, negate)
+#define PTY_DETAILS_APPLY_TO_ARITHMETIC_UNARY_CONST_OPERATORS(fun) \
+	fun(-, negates) \
+	fun(+, positivates)
 
-
-
-#define PTY_DETAILS_WRITE_ALL_ARITH_OPERATORS \
-	PTY_DETAILS_LIST_CONST_ARITH_BIN_OPS(PTY_DETAILS_DEFINE_BINARY_CONST_OPERATOR)\
-	PTY_DETAILS_LIST_ARITH_BIN_OPS(PTY_DETAILS_DEFINE_BINARY_MUTABLE_OPERATOR) \
-	PTY_DETAILS_LIST_CONST_ARITHMETIC_UNARY_OPERATORS(PTY_DETAILS_DEFINE_UNARY_CONST_OPERATOR)
-
-
+#define PTY_DETAILS_APPLY_TO_ARITHMETIC_TRANSITIVE_OPERATORS(fun) \
+	fun(+, Arithmetic) \
+	fun(-, Arithmetic)
 
 namespace pty {
-	template<class Base>
-		struct Arithmetic : Base {
 
-			PTY_DETAILS_WRITE_ALL_ARITH_OPERATORS
+	PTY_DETAILS_APPLY_TO_ARITHMETIC_BINARY_CONST_OPERATORS(PTY_DETAILS_DEFINE_BINARY_CONST_OPERATION)
+	PTY_DETAILS_APPLY_TO_ARITHMETIC_BINARY_MUTABLE_OPERATORS(PTY_DETAILS_DEFINE_BINARY_MUTABLE_OPERATION)
+	PTY_DETAILS_APPLY_TO_ARITHMETIC_UNARY_CONST_OPERATORS(PTY_DETAILS_DEFINE_UNARY_CONST_OPERATION)
 
-			protected:
-			using Base::operator_base;
-			~Arithmetic() = default;
-		};
+	PTY_DETAILS_DEFINE_PROPERTY(Arithmetic, 
 
-	namespace details {
-		template<class T, class U>
-			using prevent_arit_duplication = prevent_duplication<T, U, Arithmetic>;
-	}
-	template<typename T, class U, class = details::prevent_arit_duplication<T, U>>
-		inline constexpr auto operator+(const T& lhv, const Arithmetic<U>& rhv) {
-			return rhv + lhv;
-		}
+			PTY_DETAILS_APPLY_TO_ARITHMETIC_BINARY_CONST_OPERATORS(PTY_DETAILS_DEFINE_BINARY_CONST_OPERATOR)
+			PTY_DETAILS_APPLY_TO_ARITHMETIC_BINARY_MUTABLE_OPERATORS(PTY_DETAILS_DEFINE_BINARY_MUTABLE_OPERATOR)
+			PTY_DETAILS_APPLY_TO_ARITHMETIC_UNARY_CONST_OPERATORS(PTY_DETAILS_DEFINE_UNARY_CONST_OPERATOR)
 
-	template<typename T, class U, class = details::prevent_arit_duplication<T, U>>
-		inline constexpr auto operator*(const T& lhv, const Arithmetic<U>& rhv) {
-			return rhv * lhv;
-		}
+			)
+
+
+	PTY_DETAILS_APPLY_TO_ARITHMETIC_TRANSITIVE_OPERATORS(PTY_DETAILS_DEFINE_TRANSITIVE_OPERATOR)
 
 }
 
+
+#undef PTY_DETAILS_APPLY_TO_BINARY_MUTABLE_ARITHMETIC_OPERATIONS
+#undef PTY_DETAILS_APPLY_TO_ARITHMETIC_BINARY_CONST_OPERATORS
+#undef PTY_DETAILS_APPLY_TO_ARITHMETIC_UNARY_CONST_OPERATORS
+#undef PTY_DETAILS_APPLY_TO_ARITHMETIC_TRANSITIVE_OPERATOR
 
 #endif
 
