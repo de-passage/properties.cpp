@@ -45,7 +45,19 @@ namespace pty {
 
 	PTY_DETAILS_APPLY_TO_ARITHMETIC_TRANSITIVE_OPERATORS(PTY_DETAILS_DEFINE_TRANSITIVE_OPERATOR)
 
-	typedef pty::tuple<pty::plus, pty::minus, pty::multiplies, pty::divides, pty::modulus, pty::plus_assign, pty::minus_assign, pty::multiply_assign, pty::divide_assign, pty::modulus_assign> arithmetic_operations;
+	typedef pty::tuple< pty::plus, 
+		pty::minus, 
+		pty::multiplies, 
+		pty::divides, 
+		pty::modulus, 
+		pty::plus_assign, 
+		pty::minus_assign, 
+		pty::multiply_assign, 
+		pty::divide_assign, 
+		pty::modulus_assign, 
+		pty::negates, 
+		pty::positivates
+			> arithmetic_operations;
 }
 
 

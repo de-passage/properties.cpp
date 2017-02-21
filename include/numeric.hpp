@@ -15,6 +15,7 @@ namespace pty {
 			private:
 				typedef details::Properties<Base, Args<Base>..., Comparable<Base>, Arithmetic<Base>, Bitwise<Base>> Parent;
 			protected:
+				~Numeric() = default;
 				using Parent::self;
 				friend pty::details::Self<Base>;
 
@@ -23,12 +24,12 @@ namespace pty {
 					return op(value(),  i.value());
 				}
 
-			template<class Op, class = pty::enable_for<Op, pty::arithmetic_operations>>
+			template<class Op, class = pty::enable_for<Op, pty::arithmetic_operations, pty::bitwise_operations>>
 				constexpr Base operator_base(const Op& op, const Numeric& i) const {
 					return Base(op(value(), i.value()));
 				}
 
-			template<class Op, class = pty::enable_for<Op, pty::arithmetic_operations>>
+			template<class Op, class = pty::enable_for<Op, pty::arithmetic_operations, pty::bitwise_operations>>
 				constexpr Base operator_base(const Op& op, const Numeric& i) {
 					return Base(op(value(), i.value()));
 				}

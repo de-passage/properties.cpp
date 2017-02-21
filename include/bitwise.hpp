@@ -3,6 +3,7 @@
 
 #include "details/operation_macros.hpp"
 #include "details/define_property.hpp"
+#include "meta/tuple.hpp"
 
 #define PTY_DETAILS_APPLY_TO_TRANSITIVE_BITWISE_OPERATIONS(op) \
 	op(&, Bitwise)\
@@ -40,6 +41,18 @@ PTY_DETAILS_DEFINE_PROPERTY(Bitwise,
 		)
 
 PTY_DETAILS_APPLY_TO_TRANSITIVE_BITWISE_OPERATIONS(PTY_DETAILS_DEFINE_TRANSITIVE_OPERATOR)
+
+typedef tuple< bitwise_and, 
+		bitwise_or, 
+		bitwise_xor, 
+		shift_left, 
+		shift_right, 
+		bitwise_not, 
+		bitwise_or_assign, 
+		bitwise_and_assign, 
+		bitwise_xor_assign, 
+		shift_left_assign, 
+		shift_right_assign > bitwise_operations;
 
 }
 

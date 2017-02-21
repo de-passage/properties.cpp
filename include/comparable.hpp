@@ -37,7 +37,13 @@ namespace pty {
 	PTY_DETAILS_APPLY_TO_TRANSITIVE_COMPARISON_OPERATORS(PTY_DETAILS_DEFINE_TRANSITIVE_OPERATOR)
 	PTY_DETAILS_APPLY_TO_REVERSABLE_COMPARISON_OPERATORS(PTY_DETAILS_DEFINE_REVERSE_OPERATOR)
 
-	typedef pty::tuple<pty::less, pty::greater, pty::less_equal, pty::greater_equal, pty::equal_to, pty::not_equal_to> comparison_operation;
+	typedef pty::tuple<	pty::less, 
+			pty::greater, 
+			pty::less_equal, 
+			pty::greater_equal, 
+			pty::equal_to, 
+			pty::not_equal_to
+				> comparison_operation;
 }
 
 #undef PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS
