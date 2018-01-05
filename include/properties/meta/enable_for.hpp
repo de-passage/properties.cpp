@@ -1,7 +1,7 @@
 #ifndef GUARD_PTY_META_ENABLE_FOR_HPP__
 #define GUARD_PTY_META_ENABLE_FOR_HPP__
 
-#include "meta.hpp"
+#include "properties/meta.hpp"
 
 
 namespace pty {

@@ -1,11 +1,11 @@
 #ifndef GUARD_PTY_NUMERIC_HPP__
 #define GUARD_PTY_NUMERIC_HPP__
 
-#include "details/properties.hpp"
-#include "arithmetic.hpp"
-#include "comparable.hpp"
-#include "bitwise.hpp"
-#include "meta/enable_for.hpp"
+#include "properties/details/properties.hpp"
+#include "properties/arithmetic.hpp"
+#include "properties/comparable.hpp"
+#include "properties/bitwise.hpp"
+#include "properties/meta/enable_for.hpp"
 
 namespace pty {
 	template<class Base>

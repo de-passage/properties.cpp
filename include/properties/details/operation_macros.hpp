@@ -12,7 +12,7 @@
 			return operator_base(op());\
 		}
 
-#include "details/operation.hpp"
+#include "properties/details/operation.hpp"
 
 #define PTY_DETAILS_DEFINE_UNARY_OPERATION(op, sym, const_q) \
 	namespace details { \
@@ -47,7 +47,7 @@
 #define PTY_DETAILS_DEFINE_UNARY_CONST_OPERATION(sym, op) PTY_DETAILS_DEFINE_UNARY_OPERATION(sym, op, const)
 #define PTY_DETAILS_DEFINE_UNARY_MUTABLE_OPERATION(sym, op) PTY_DETAILS_DEFINE_UNARY_OPERATION(sym, op,)
 
-#include "details/prevent_duplication.hpp"
+#include "properties/details/prevent_duplication.hpp"
 
 #define PTY_DETAILS_DEFINE_REVERSE_OPERATOR(sym, op, klass) \
 	template<typename T, class U, class = details::prevent_duplication<T, U, klass>> \

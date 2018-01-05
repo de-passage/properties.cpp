@@ -1,9 +1,9 @@
 #ifndef GUARD_PTY_COMPARABLE_HPP__
 #define GUARD_PTY_COMPARABLE_HPP__
 
-#include "details/operation_macros.hpp"
-#include "details/define_property.hpp"
-#include "meta/tuple.hpp"
+#include "properties/details/operation_macros.hpp"
+#include "properties/details/define_property.hpp"
+#include "properties/meta/tuple.hpp"
 
 #define PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS(fun) \
 	fun(<, less)\

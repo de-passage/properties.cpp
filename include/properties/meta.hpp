@@ -1,7 +1,7 @@
 #ifndef GUARD_PTY_DETAILS_META_HPP__
 #define GUARD_PTY_DETAILS_META_HPP__
 
-#include "meta/tuple.hpp"
+#include "properties/meta/tuple.hpp"
 
 namespace pty {
 

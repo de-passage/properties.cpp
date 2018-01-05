@@ -1,7 +1,7 @@
 #ifndef GUARD_PTY_DETAILS_PROPERTIES_HPP__
 #define GUARD_PTY_DETAILS_PROPERTIES_HPP__
 
-#include "details/self.hpp"
+#include "properties/details/self.hpp"
 
 namespace pty {
 
