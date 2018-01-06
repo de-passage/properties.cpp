@@ -5,6 +5,7 @@
 
 #include "properties/details/define_property.hpp"
 #include "properties/meta/tuple.hpp"
+#include "properties/meta/tuple_operations.hpp"
 
 #define PTY_DETAILS_APPLY_TO_ARITHMETIC_BINARY_MUTABLE_OPERATORS(fun) \
 	fun(+=, plus_assign)\
@@ -45,19 +46,28 @@ namespace pty {
 
 	PTY_DETAILS_APPLY_TO_ARITHMETIC_TRANSITIVE_OPERATORS(PTY_DETAILS_DEFINE_TRANSITIVE_OPERATOR)
 
+	typedef pty::tuple<
+		pty::plus_assign, 
+		pty::minus_assign, 
+		pty::multiply_assign, 
+		pty::divide_assign, 
+		pty::modulus_assign
+			> mutating_arithmetic_operations;
+
 	typedef pty::tuple< pty::plus, 
 		pty::minus, 
 		pty::multiplies, 
 		pty::divides, 
 		pty::modulus, 
-		pty::plus_assign, 
-		pty::minus_assign, 
-		pty::multiply_assign, 
-		pty::divide_assign, 
-		pty::modulus_assign, 
 		pty::negates, 
 		pty::positivates
+			> constant_arithmetic_operations;
+
+	typedef pty::meta::concat<
+		mutating_arithmetic_operations,
+		constant_arithmetic_operations
 			> arithmetic_operations;
+
 }
 
 
