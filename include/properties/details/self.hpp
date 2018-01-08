@@ -15,26 +15,6 @@ namespace pty {
 					inline constexpr Base& self() {
 						return *static_cast<Base*>(this);
 					}
-
-					template<class Op, class Operand>
-						inline constexpr auto operator_base(const Op& op, const Operand& oper) const { 
-							return self().operator_base(op, oper);
-						}
-
-					template<class Op, class Operand>
-						inline constexpr auto operator_base(const Op& op, const Operand& oper) { 
-							return self().operator_base(op, oper);
-						}
-
-					template<class Op>
-						inline constexpr auto operator_base(const Op& op) const { 
-							return self().operator_base(op);
-						}
-
-					template<class Op, class Operand>
-						inline constexpr auto operator_base(const Op& op) { 
-							return self().operator_base(op);
-						}
 			};
 	}
 }

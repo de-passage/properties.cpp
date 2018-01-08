@@ -1,18 +1,18 @@
 #ifndef GUARD_PTY_DETAILS_OPERATION_MACROS_HPP__
 #define GUARD_PTY_DETAILS_OPERATION_MACROS_HPP__
 
+#include "properties/helpers/downcast.hpp"
+
 #define PTY_DETAILS_DEFINE_BINARY_OPERATOR(sym, op, const_q) \
 	template<class T> \
-		inline constexpr auto operator sym (const T& t) const_q -> decltype(operator_base(op(), t)) {\
-			return operator_base(op(),t);\
+		inline constexpr auto operator sym (const T& t) const_q {\
+			return downcast(this).operator_base(op(),t);\
 		}
 
 #define PTY_DETAILS_DEFINE_UNARY_OPERATOR(sym, op, const_q) \
 		inline constexpr auto operator sym () const_q{\
-			return operator_base(op());\
+			return downcast(this).operator_base(op());\
 		}
-
-#include "properties/details/operation.hpp"
 
 #include "properties/details/define_operation.hpp"
 

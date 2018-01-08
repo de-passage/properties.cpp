@@ -1,6 +1,9 @@
 #ifndef GUARD_PTY_DETAILS_DEFINE_OPERATION_HPP__
 #define GUARD_PTY_DETAILS_DEFINE_OPERATION_HPP__
 
+#include "properties/details/operation.hpp"
+
+
 #define PTY_DETAILS_DEFINE_UNARY_OPERATION(op, sym, const_q) \
 	namespace details { \
 		template<class T> \
@@ -17,7 +20,8 @@
 	namespace details { \
 		template<class T> \
 			struct sym { \
-				inline constexpr T operator ()(const_q T& lhv, const T& rhv) const { \
+				template<class U> \
+				inline constexpr T operator ()(const_q T& lhv, const U& rhv) const { \
 					return lhv op rhv;	\
 				}	\
 			};\

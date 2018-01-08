@@ -40,6 +40,8 @@ namespace pty {
 	template<class T, class ...Args>
 		using enable_for = enable_if<is_one_of<T, Args...>, T>;
 	template<class T, class ...Args>
+		using enable_for_t = details::enable_if_t<is_one_of<T, Args...>, T>;
+	template<class T, class ...Args>
 		using disable_for = enable_if<!is_one_of<T, Args...>, T>;
 
 }

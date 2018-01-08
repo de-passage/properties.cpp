@@ -5,13 +5,13 @@ namespace pty {
 	namespace details {
 	template<template<class> class Op>
 		struct binary_operator {
-			template<class T>
-				inline constexpr auto operator()(const T& t, const T& u) const {
+			template<class T, class U>
+				inline constexpr auto operator()(const T& t, const U& u) const {
 					return Op<T>()(t, u);
 				}
 
-			template<class T>
-				inline constexpr auto operator()(T& t, const T& u) const {
+			template<class T, class U>
+				inline constexpr auto operator()(T& t, const U& u) const {
 					return Op<T>()(t, u);
 				}
 		};

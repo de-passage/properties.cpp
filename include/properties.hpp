@@ -2,6 +2,7 @@
 #define GUARD_PTY_PROPERTIES_HPP__
 
 #include "properties/details/properties.hpp"
+#include "properties/adaptor.hpp"
 
 namespace pty {
 
