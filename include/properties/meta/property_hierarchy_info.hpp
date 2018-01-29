@@ -19,7 +19,9 @@ namespace pty {
         };
 
       template<class T>
-        struct get_properties_t;
+        struct get_properties_t {
+			typedef pty::tuple<> value;
+		};
       template<class T, class ...Args>
         struct get_properties_t<pty::details::Properties<T, Args...>> {
           typedef pty::tuple<Args...> value;

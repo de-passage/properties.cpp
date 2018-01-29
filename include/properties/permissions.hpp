@@ -53,21 +53,25 @@ namespace pty {
 
 	template<class Base>
 		struct ReadOnly : Base {
+			using Base::operator=;
 			typedef meta::prepend<permissions::Read, meta::remove<permissions::Write, permissions::get<Base>>> Permissions;
 		};
 
 	template<class Base>
 		struct WriteOnly : Base {
+			using Base::operator=;
 			typedef meta::prepend<permissions::Write, meta::remove<permissions::Read, permissions::get<Base>>> Permissions;
 		};
 
 	template<class Base>
 		struct ReadWrite : Base {
+			using Base::operator=;
 			typedef meta::prepend<permissions::Write, meta::prepend<permissions::Read, permissions::get<Base>>> Permissions;
 		};
 
 	template<class Base>
 		struct NoAccess : Base {
+			using Base::operator=;
 			typedef meta::remove<permissions::Write, meta::remove<permissions::Read, permissions::get<Base>>> Permissions;
 		};
 

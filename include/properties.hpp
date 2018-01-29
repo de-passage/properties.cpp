@@ -8,10 +8,9 @@ namespace pty {
 
     template<class T, template<class> class ...Args>
         struct Properties : details::Properties<T, Args<T>...> {
+			using details::Properties<T, Args<T>...>::operator=;
         };
 
-    template<class T>
-        using Adaptor = details::Self<T>;
 }
 
 #endif

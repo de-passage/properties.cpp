@@ -9,7 +9,9 @@ namespace pty {
 		template<class ...Args>
 			struct Properties;
 		template<class T, template<class> class A, template<class> class ...Args, class P>
-			struct Properties<T, A<P>, Args<P>...> : A<Properties<T, Args<P>...> > {};
+			struct Properties<T, A<P>, Args<P>...> : A<Properties<T, Args<P>...> > {
+				using  A<Properties<T, Args<P>...> >::operator=;
+			};
 		template<class T>
 			struct Properties<T> : Self<T> {};
 	}

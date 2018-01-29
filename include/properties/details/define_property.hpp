@@ -7,6 +7,7 @@
 			using Base::self; \
 			inline ~name() = default; \
 		public: \
+			using Base::operator=; \
 			in_processing\
 	};
 
