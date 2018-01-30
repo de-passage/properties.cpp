@@ -81,29 +81,27 @@ namespace pty {
 
 	template<class T>
 		struct Streamable : T {
-			void foo() {};
-
 			template<class S, class U>
-				friend constexpr S& operator<<(S& t, const Streamable<U>& s) {
+				friend inline constexpr S& operator<<(S& t, const Streamable<U>& s);/* {
 					return downcast(&s).operator_base(pty::operators::stream_out(), t);
-				}
+				}*/
 
 			template<class S, class U>
-				friend constexpr S& operator>>(S& t, pty::Streamable<U>& s) {
+				friend inline constexpr S& operator>>(S& t, pty::Streamable<U>& s);/* {
 					return downcast(&s).operator_base(pty::operators::stream_in(), t);
-				}
+				}*/
 
 		};
-}
-/*
-   template<class S, class Q>
-   inline constexpr S& operator<<(S& t, const pty::Streamable<Q>& s) {
+//*
+   template<class S, class U>
+   inline constexpr S& operator<<(S& t, const pty::Streamable<U>& s) {
    return downcast(&s).operator_base(pty::operators::stream_out(), t);
    }
 
-   template<class S, class Q>
-   inline constexpr S& operator>>(S& t, pty::Streamable<Q>& s) {
+   template<class S, class U>
+   inline constexpr S& operator>>(S& t, pty::Streamable<U>& s) {
    return downcast(&s).operator_base(pty::operators::stream_in(), t);
    }
-   */
+  // */
+}
 #endif // GUARD_PTY_STREAMABLE_HPP__

@@ -73,7 +73,9 @@ namespace pty {
 						friend pty::adaptor<Attribute>;
 						friend pty::adaptor<const Attribute>;
 						friend Owner;
-						using Base::operator=;
+
+						inline constexpr Attribute& operator=(const Attribute& a) {Base::operator=(a.value); return *this; }
+						inline constexpr Attribute& operator=(const T& a) {Base::operator=(a); return *this; }
 
 						constexpr inline operator T() const {
 							return value;
@@ -120,7 +122,8 @@ namespace pty {
 
 						template<class Ret, class In>
 							constexpr Ret operator_base(const pty::apply_left<pty::assign, Ret, In>& op) {
-								return this->value = op.value();
+								value = op.value();
+								return *this;
 							}
 
 

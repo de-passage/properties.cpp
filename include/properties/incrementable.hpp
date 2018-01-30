@@ -21,7 +21,7 @@ namespace pty {
 				}	\
 			}; \
 	}\
-	using name = pty::details::unary_operator<details::suffix_increment>;\
+	using name = pty::details::unary_operator<details:: name>;\
 
 
 #define PTY_DETAILS_DEFINE_POSTINCREMENT_OPERATOR(op, name) \
