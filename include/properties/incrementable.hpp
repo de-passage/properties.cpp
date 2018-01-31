@@ -13,15 +13,12 @@ namespace pty {
 
 
 #define PTY_DETAILS_DEFINE_POSTINCREMENT_OPERATION(op, name)\
-	namespace details { \
-		template<class T>\
-			struct name {\
-				inline constexpr T operator()(T& obj) const {\
-					return obj op; \
-				}	\
-			}; \
-	}\
-	using name = pty::details::unary_operator<details:: name>;\
+		struct name {\
+			template<class T>\
+			inline constexpr T operator()(T& obj) const {\
+				return obj op; \
+			}	\
+		}; \
 
 
 #define PTY_DETAILS_DEFINE_POSTINCREMENT_OPERATOR(op, name) \

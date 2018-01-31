@@ -105,24 +105,24 @@ namespace pty {
 
 
 						template<class Op, class In, class = pty::enable_for<Op, pty::comparison_operation>, class U = T, class = std::enable_if_t<std::is_arithmetic<U>::value>>
-							constexpr bool operator_base(const pty::apply_left<Op, bool, In>& op) const {
+							constexpr bool operator_base(const pty::apply<Op, In>& op) const {
 								return op(value);
 							}
 
 						template<class Op, class In, class = pty::enable_for<Op, pty::constant_bitwise_operations, pty::constant_arithmetic_operations>, class U = T, class = std::enable_if_t<std::is_arithmetic<U>::value>>
-							constexpr Attribute operator_base(const pty::apply_left<Op, Attribute, In>& op) const {
-								return Attribute(Op()(value, op.value()));
+							constexpr Attribute operator_base(const pty::apply<Op, In>& op) const {
+								return Attribute(op(value));
 							}
 
 						template<class Op, class In, class = pty::enable_for<Op, pty::bitwise_operations, pty::arithmetic_operations, pty::assign>, class U = T, class = std::enable_if_t<std::is_arithmetic<U>::value>>
-							constexpr Attribute& operator_base(const pty::apply_left<Op, Attribute, In>& op) {
-								Op()(value, op.value());
+							constexpr Attribute& operator_base(const pty::apply<Op, In>& op) {
+								op(value);
 								return *this;
 							}
 
 						template<class Ret, class In>
-							constexpr Ret operator_base(const pty::apply_left<pty::assign, Ret, In>& op) {
-								value = op.value();
+							constexpr Ret operator_base(const pty::apply<pty::assign, In>& op) {
+								op(value);
 								return *this;
 							}
 
