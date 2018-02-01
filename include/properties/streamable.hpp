@@ -3,6 +3,11 @@
 
 #include "properties/meta/tuple.hpp"
 #include "properties/details/operation.hpp"
+#include "properties/details/define_property.hpp"
+
+#include "properties/meta/has_property.hpp"
+#include "properties/operators/cast.hpp"
+#include "properties/apply.hpp"
 
 namespace pty {
 	namespace operators {
@@ -10,23 +15,23 @@ namespace pty {
 			template<template<class> class Op>
 				struct stream_adaptor {
 					template<class T, class U, class ...R>
-						inline constexpr auto operator()(const T& t, const U& u, R... r) const{
-							return operator()(Op<T>(t, u), r...);
+						inline constexpr auto operator()(const T& t, const U& u, const R&... r) const{
+							return operator()(Op<T>()(t, u), r...);
 						}
 
 					template<class T, class U, class ...R>
-						inline constexpr auto& operator()(T& t, const U& u, R... r) const {
-							return operator()(Op<T>(t, u), r...);
+						inline constexpr auto& operator()(T& t, const U& u, const R&... r) const {
+							return operator()(Op<T>()(t, u), r...);
 						}
 
 					template<class T, class U, class ...R>
-						inline constexpr auto operator()(const T& t, U& u, R... r) const {
-							return operator()(Op<T>(t, u), r...);
+						inline constexpr auto operator()(const T& t, U& u, R&... r) const {
+							return operator()(Op<T>()(t, u), r...);
 						}
 
 					template<class T, class U, class ...R>
-						inline constexpr auto& operator()(T& t, U& u, R... r) const {
-							return operator()(Op<T>(t, u), r...);
+						inline constexpr auto& operator()(T& t, U& u, R&... r) const {
+							return operator()(Op<T>()(t, u), r...);
 						}
 
 					template<class T, class U>
@@ -60,18 +65,18 @@ namespace pty {
 			template<class T>
 				struct stream_in {
 					template<class U>
-						inline T& operator()(T& oss, U& t) const {
-							return oss >> t;
+						inline T& operator()(T& iss, U& t) const {
+							return iss >> t;
 						}
 					template<class U>
-						inline T& operator()(T& oss, const U&) const {
-							return oss;
+						inline T& operator()(T& iss, const U&) const {
+							return iss;
 						}
 				};
 		}
 
 		using stream_in = details::stream_adaptor<details::stream_in>;
-		using stream_out =details::stream_adaptor<details::stream_out>;
+		using stream_out = details::stream_adaptor<details::stream_out>;
 
 
 		typedef pty::tuple<stream_in, stream_out> stream_operations;
@@ -81,26 +86,36 @@ namespace pty {
 
 	template<class T>
 		struct Streamable : T {
-			template<class S, class U>
-				friend inline constexpr S& operator<<(S& t, const Streamable<U>& s);/* {
-					return downcast(&s).operator_base(pty::operators::stream_out(), t);
-				}*/
+			using T::operator=;
+			PTY_FORWARD_OPERATOR_BASE(T)
+			template<class S, class U, class>
+				friend inline constexpr S& _stream_out(S& t, const Streamable& s);
+			template<class S, class U, class>
+				friend inline constexpr S& _stream_in(S& t, const Streamable& s);
 
-			template<class S, class U>
-				friend inline constexpr S& operator>>(S& t, pty::Streamable<U>& s);/* {
-					return downcast(&s).operator_base(pty::operators::stream_in(), t);
-				}*/
-
+			template<class S>
+			constexpr inline S& operator_base(const pty::operators::stream_in& op, S& stream) {
+				return pty::apply<pty::operators::stream_in, S&>{op, stream};
+			}
 		};
 //*
-   template<class S, class U>
-   inline constexpr S& operator<<(S& t, const pty::Streamable<U>& s) {
-   return downcast(&s).operator_base(pty::operators::stream_out(), t);
+template<class S, class T>
+	inline constexpr S& _stream_out(S& s,const Streamable<T>& t) {
+	   return downcast(&t).template operator_base_ref(pty::operators::stream_out(), s);
+	}
+
+   template<class S, class U, class = std::enable_if_t<pty::meta::has_property<U, pty::Streamable>>>
+   inline constexpr S& operator<<(S& t, const U& s) {
+	   return _stream_out(t, s);
    }
 
-   template<class S, class U>
-   inline constexpr S& operator>>(S& t, pty::Streamable<U>& s) {
-   return downcast(&s).operator_base(pty::operators::stream_in(), t);
+template<class S, class T>
+	inline constexpr S& _stream_in(S& s, Streamable<T>& t) {
+	   return downcast(&t).operator_base_ref(pty::operators::stream_in(), s);
+	}
+   template<class S, class U, class = std::enable_if_t<pty::meta::has_property<U, pty::Streamable>>>
+   inline constexpr S& operator>>(S& t, U& s) {
+	   return _stream_in(t, s);
    }
   // */
 }

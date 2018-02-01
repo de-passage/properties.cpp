@@ -15,7 +15,7 @@ namespace pty {
 		}
 
 		template <typename Klass, template<typename> class Prop>
-			struct has_property : public details::class_has_property<Klass, Prop> { };
+			constexpr bool has_property = details::class_has_property<Klass, Prop>::value;
 	}
 }
 #endif // GUARD_PTY_META_HAS_PROPERTY_HPP__
