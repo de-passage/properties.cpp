@@ -13,7 +13,13 @@ namespace pty {
 				using  A<Properties<T, Args<P>...> >::operator=;
 			};
 		template<class T>
-			struct Properties<T> : Self<T> {};
+			struct Properties<T> : Self<T> {
+				struct you_need_to_properly_define_operator_base {};
+				template<class ...Args>
+					constexpr inline you_need_to_properly_define_operator_base operator_base(Args...) { return {}; }
+				template<class ...Args>
+					constexpr inline you_need_to_properly_define_operator_base operator_base(Args...) const {return {};};
+			};
 	}
 
 }

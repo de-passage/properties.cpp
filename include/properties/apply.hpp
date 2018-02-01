@@ -29,7 +29,6 @@ namespace pty {
 			constexpr inline auto invoke(T& t, const std::index_sequence<Is...>&) const {
 				return op(t, std::get<Is>(arguments)...);
 			}
-
 	};
 }
 #endif// GUARD_PTY_APPLY_HPP___

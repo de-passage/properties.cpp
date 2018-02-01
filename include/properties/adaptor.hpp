@@ -1,6 +1,9 @@
 #ifndef GUARD_PTY_ADAPTOR_HPP__
 #define GUARD_PTY_ADAPTOR_HPP__
 
+#include <utility>
+
+
 namespace pty {
 
 	namespace details {
@@ -24,23 +27,13 @@ namespace pty {
 
 
 			template<class Op, class ...Operand, bool expects_reference = false>
-				inline constexpr auto operator_base(const Op& op, const Operand&... oper) const -> details::add_ref<expects_reference, decltype(self->operator_base(op, oper...))> { 
-					return self->operator_base(op, oper...);
+				inline constexpr auto operator_base(const Op& op, Operand&&... oper) const -> details::add_ref<expects_reference, decltype(self->operator_base(op, oper...))> { 
+					return self->operator_base(op, std::forward<Operand>(oper)...);
 				}
 
 			template<class Op, class ...Operand, bool expects_reference = false>
-				inline constexpr auto operator_base(const Op& op, const Operand&... oper)  -> details::add_ref<expects_reference, decltype(self->operator_base(op, oper...))> { 
-					return self->operator_base(op, oper...);
-				}
-
-			template<class Op, class Ref, class ...Operand>
-				inline constexpr Ref& operator_base_ref(const Op& op, Ref& r, const Operand&... oper) const {
-					return self->operator_base(op, r, oper...);
-				}
-
-			template<class Op, class Ref, class ...Operand>
-				inline constexpr Ref& operator_base_ref(const Op& op, Ref& r, const Operand&... oper)  {
-					return self->operator_base(op, r, oper...);
+				inline constexpr auto operator_base(const Op& op, Operand&&... oper)  -> details::add_ref<expects_reference, decltype(self->operator_base(op, oper...))> { 
+					return self->operator_base(op, std::forward<Operand>(oper)...);
 				}
 		};
 }

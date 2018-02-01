@@ -3,12 +3,12 @@
 
 #define PTY_FORWARD_OPERATOR_BASE(Base) \
 	template<class _pty_Op, class ..._pty_Args>\
-	constexpr inline auto operator_base(const _pty_Op& op, _pty_Args... args) {\
-		return Base::operator_base(op, args...);\
+	constexpr inline auto operator_base(const _pty_Op& op, _pty_Args&&... args) -> decltype(Base::operator_base(op, std::forward<_pty_Args>(args)...)) {\
+		return Base::operator_base(op, std::forward<_pty_Args>(args)...);\
 	}\
 	template<class _pty_Op, class ..._pty_Args>\
-	constexpr inline auto operator_base(const _pty_Op& op, _pty_Args... args) const {\
-		return Base::operator_base(op, args...);\
+	constexpr inline auto operator_base(const _pty_Op& op, _pty_Args&&... args) const -> decltype(Base::operator_base(op,  std::forward<_pty_Args>(args)...)) {\
+		return Base::operator_base(op, std::forward<_pty_Args>(args)...);\
 	}\
 
 #define PTY_DETAILS_DEFINE_PROPERTY(name, in_processing) \

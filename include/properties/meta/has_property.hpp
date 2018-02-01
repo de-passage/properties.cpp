@@ -14,8 +14,8 @@ namespace pty {
 				using class_has_property = decltype(check_if_has_property<Prop>(std::declval<Class*>()));
 		}
 
-		template <typename Klass, template<typename> class Prop>
-			constexpr bool has_property = details::class_has_property<Klass, Prop>::value;
+		template <typename Class, template<typename> class Prop>
+			constexpr bool has_property = details::class_has_property<std::remove_reference_t<Class>, Prop>::value;
 	}
 }
 #endif // GUARD_PTY_META_HAS_PROPERTY_HPP__
