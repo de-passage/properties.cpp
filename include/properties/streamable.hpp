@@ -82,14 +82,19 @@ namespace pty {
 			PTY_FORWARD_OPERATOR_BASE(T)
 
 			template<class S>
-			constexpr inline auto&& operator_base(const pty::operators::stream_in&, S&& stream) {
-				return downcast(this).operator_base(pty::apply<pty::operators::stream_in, S&&>{stream});
+			constexpr inline auto&& operator_base(const pty::operators::stream_in&, S& stream) {
+				return downcast(this).operator_base(pty::apply<pty::operators::stream_in, S&>{stream});
 			}
 
 			template<class S>
-			constexpr inline auto&& operator_base(const pty::operators::stream_out&, S&& stream) const {
-				return downcast(this).operator_base(pty::apply<pty::operators::stream_out, S&&>{stream});
+			constexpr inline auto&& operator_base(const pty::operators::stream_out&, S& stream) const {
+				return downcast(this).operator_base(pty::apply<pty::operators::stream_out, S&>{stream});
 			}
+			template<class S>
+			constexpr inline auto&& operator_base(const pty::apply<pty::operators::stream_in, S&>& op) {
+				return op(downcast(this).operator_base(pty::operators::cast()));
+			}
+
 		};
 //*
 template<class S, class T>
