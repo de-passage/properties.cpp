@@ -8,6 +8,7 @@
 #include "properties/meta/has_property.hpp"
 #include "properties/operators/cast.hpp"
 #include "properties/apply.hpp"
+#include "properties/helpers/downcast.hpp"
 
 namespace pty {
 	namespace operators {
@@ -58,7 +59,7 @@ namespace pty {
 		struct apply<pty::operators::stream_in, Stream> {
 			Stream& stream;
 			template<class T>
-			constexpr inline auto&& operator()(T&& t) const {
+			constexpr inline auto& operator()(T&& t) const {
 				return pty::operators::stream_in()(stream, std::forward<T>(t));
 			}
 		};
@@ -67,7 +68,7 @@ namespace pty {
 		struct apply<pty::operators::stream_out, Stream> {
 			Stream& stream;
 			template<class T>
-			constexpr inline auto&& operator()(T&& t) const {
+			constexpr inline auto& operator()(T&& t) const {
 				return pty::operators::stream_out()(stream, std::forward<T>(t));
 			}
 		};
@@ -80,7 +81,6 @@ namespace pty {
 			using T::operator=;
 
 			PTY_FORWARD_OPERATOR_BASE(T)
-/*
 			template<class S>
 			constexpr inline auto&& operator_base(const pty::operators::stream_in&, S& stream) {
 				return downcast(this).operator_base(pty::apply<pty::operators::stream_in, S&>{stream});
@@ -90,15 +90,6 @@ namespace pty {
 			constexpr inline auto&& operator_base(const pty::operators::stream_out&, S& stream) const {
 				return downcast(this).operator_base(pty::apply<pty::operators::stream_out, S&>{stream});
 			}
-			template<class S>
-			constexpr inline auto&& operator_base(const pty::apply<pty::operators::stream_in&, S>& op) {
-				return op(downcast(this).operator_base(pty::operators::cast()));
-			}
-			template<class S>
-			constexpr inline auto&& operator_base(const pty::apply<pty::operators::stream_out&, S>& op) const {
-				return op(downcast(this).operator_base(pty::operators::cast()));
-			}
-//*/
 		};
 //*
 template<class S, class T>
