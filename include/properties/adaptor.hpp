@@ -13,15 +13,28 @@ namespace pty {
 			explicit adaptor(P* p) : self(p) {}
 
 
-			template<class Op, class ...Operand, bool expects_reference = false>
-				inline constexpr auto operator_base(const Op& op, Operand&&... oper) const -> decltype(self->operator_base(op,  std::forward<Operand>(oper)...)) { 
+			template<class Op, class ...Operand>
+				inline constexpr decltype(auto) operator_base(const Op& op, Operand&&... oper) const { 
 					return self->operator_base(op, std::forward<Operand>(oper)...);
 				}
 
-			template<class Op, class ...Operand, bool expects_reference = false>
-				inline constexpr auto operator_base(const Op& op, Operand&&... oper)  -> decltype(self->operator_base(op,  std::forward<Operand>(oper)...)) { 
+			template<class Op, class ...Operand>
+				inline constexpr decltype(auto) operator_base(const Op& op, Operand&&... oper)  { 
 					return self->operator_base(op, std::forward<Operand>(oper)...);
 				}
+
+			/*
+			template<class Op>
+				inline constexpr decltype(auto) operator_base(const Op& op) const { 
+					return self->operator_base(op);
+				}
+
+			template<class Op>
+				inline constexpr decltype(auto) operator_base(const Op& op) { 
+					return self->operator_base(op);
+				}
+				*/
+
 		};
 }
 #endif // GUARD_PTY_ADAPTOR_HPP__

@@ -3,6 +3,7 @@
 
 #include "properties/details/operation_macros.hpp"
 #include "properties/details/define_property.hpp"
+#include "properties/details/define_operator_base.hpp"
 #include "properties/meta/tuple.hpp"
 
 #define PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS(fun) \
@@ -26,24 +27,27 @@
 
 namespace pty {
 
-	PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS(PTY_DETAILS_DEFINE_BINARY_CONST_OPERATION) 
+    namespace operators {
+      PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS(PTY_DETAILS_DEFINE_BINARY_CONST_OPERATION) 
+
+      typedef pty::meta::tuple<	pty::operators::less, 
+              pty::operators::greater, 
+              pty::operators::less_equal, 
+              pty::operators::greater_equal, 
+              pty::operators::equal_to, 
+              pty::operators::not_equal_to
+                  > comparison;
+    }
 
 	PTY_DETAILS_DEFINE_PROPERTY(Comparable,
 
 		PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS(PTY_DETAILS_DEFINE_BINARY_CONST_OPERATOR)
+        PTY_DETAILS_DEFINE_OPERATOR_BASE(comparison)
 
 		)
 
 	PTY_DETAILS_APPLY_TO_TRANSITIVE_COMPARISON_OPERATORS(PTY_DETAILS_DEFINE_TRANSITIVE_OPERATOR)
 	PTY_DETAILS_APPLY_TO_REVERSABLE_COMPARISON_OPERATORS(PTY_DETAILS_DEFINE_REVERSE_OPERATOR)
-
-	typedef pty::tuple<	pty::less, 
-			pty::greater, 
-			pty::less_equal, 
-			pty::greater_equal, 
-			pty::equal_to, 
-			pty::not_equal_to
-				> comparison_operation;
 }
 
 #undef PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS

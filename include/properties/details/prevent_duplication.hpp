@@ -7,8 +7,8 @@
 
 namespace pty {
 	namespace details {
-		template<class T, class U, template<class> class Pty>
-			using prevent_duplication = std::enable_if_t<!::pty::meta::has_property<T, Pty>, void>;
+		template<class T, template<class> class Pty>
+			using prevent_duplication = std::enable_if_t<!::pty::meta::has_property<T, Pty>>;
 	}
 }
 

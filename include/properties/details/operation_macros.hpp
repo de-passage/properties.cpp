@@ -5,13 +5,13 @@
 
 #define PTY_DETAILS_DEFINE_BINARY_OPERATOR(sym, op, const_q) \
 	template<class T> \
-		inline constexpr auto operator sym (const T& t) const_q {\
-			return downcast(this).operator_base(op(),t);\
+		inline constexpr decltype(auto) operator sym (const T& t) const_q { \
+			return downcast(this).operator_base(pty::operators:: op(),t);\
 		}
 
 #define PTY_DETAILS_DEFINE_UNARY_OPERATOR(sym, op, const_q) \
-		inline constexpr auto operator sym () const_q{\
-			return downcast(this).operator_base(op());\
+		inline constexpr decltype(auto) operator sym () const_q { \
+			return downcast(this).operator_base(pty::operators:: op());\
 		}
 
 #include "properties/details/define_operation.hpp"
@@ -24,8 +24,8 @@
 #include "properties/details/prevent_duplication.hpp"
 
 #define PTY_DETAILS_DEFINE_REVERSE_OPERATOR(sym, op, klass) \
-	template<typename T, class U, class = details::prevent_duplication<T, U, klass>> \
-		inline constexpr auto operator sym(const T& lhv, const klass<U>& rhv) { \
+	template<typename T, class U, class = details::prevent_duplication<T, klass>> \
+		inline constexpr decltype(auto) operator sym(const T& lhv, const klass<U>& rhv) { \
 			return rhv op lhv; \
 		} \
 

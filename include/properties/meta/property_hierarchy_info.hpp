@@ -8,23 +8,33 @@ namespace pty {
   namespace meta {
     namespace details {
       template<class T>
-        struct get_base_t {
-			// Required to side-step anticipated instanciation of functions during the property building process.
-			// Dummy property<T> classes are created so removing this line will generate an error if it is used in a function return type deduction
-			typedef T value;
-		};
+        struct get_base_t;
       template<class T, class ...Args>
         struct get_base_t<pty::details::Properties<T, Args...>> {
           typedef T value;
         };
+      template<template<class> class Prop, class T, class ...Args>
+        struct get_base_t<const Prop<pty::details::Properties<T, Args...>>&> {
+          typedef T value;
+        };
+      template<template<class> class Prop, class T, class ...Args>
+        struct get_base_t<Prop<pty::details::Properties<T, Args...>>> {
+          typedef T value;
+        };
 
       template<class T>
-        struct get_properties_t {
-			typedef pty::tuple<> value;
-		};
+        struct get_properties_t;
       template<class T, class ...Args>
         struct get_properties_t<pty::details::Properties<T, Args...>> {
-          typedef pty::tuple<Args...> value;
+          typedef pty::meta::tuple<Args...> value;
+        };
+      template<template<class> class Prop, class T, class ...Args>
+        struct get_properties_t<Prop<pty::details::Properties<T, Args...>>> {
+          typedef pty::meta::tuple<Args...> value;
+        };
+      template<template<class> class Prop, class T, class ...Args>
+        struct get_properties_t<const Prop<pty::details::Properties<T, Args...>>&> {
+          typedef pty::meta::tuple<Args...> value;
         };
     }
 
