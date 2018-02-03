@@ -33,7 +33,7 @@ namespace pty {
 
 						template<class R, bool Cond>
 							struct extract_if_possible {
-								typedef tuple<> value;
+								typedef pty::meta::tuple<> value;
 							};
 						template<class R>
 							struct extract_if_possible<R, true> {

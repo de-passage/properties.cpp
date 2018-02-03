@@ -36,31 +36,31 @@ namespace pty {
 		struct print_permission_list;
 
 	template<class T, class U, class ...Args>
-		struct print_permission_list<pty::tuple<T, U, Args...>> {
-			static void go(std::ostream& oss) {
+		struct print_permission_list<pty::meta::tuple<T, U, Args...>> {
+			static void into(std::ostream& oss) {
 				oss << string_for<T>::value << ", ";
-				print_permission_list<pty::tuple<Args...>>::go(oss);
+				print_permission_list<pty::meta::tuple<Args...>>::into(oss);
 			}
 		};
 
 	template<class T>
-		struct print_permission_list<pty::tuple<T>> {
-			static void go(std::ostream& oss) {
+		struct print_permission_list<pty::meta::tuple<T>> {
+			static void into(std::ostream& oss) {
 				oss << string_for<T>::value;
 			}
 		};
 
 	template<>
-		struct print_permission_list<pty::tuple<>> {
-			static void go(std::ostream&) {}
+		struct print_permission_list<pty::meta::tuple<>> {
+			static void into(std::ostream&) {}
 		};
 }
 }
 
-template<class ...Args>
-std::ostream& operator<<(std::ostream& oss, pty::tuple<Args...>) {
+template<class ...bosArgs, class ...Args>
+std::basic_ostream<bosArgs...>& operator<<(std::basic_ostream<bosArgs...>& oss, pty::meta::tuple<Args...>) {
 	oss << "{";
-	pty::details::print_permission_list<pty::tuple<Args...>>::go(oss);
+	pty::details::print_permission_list<pty::meta::tuple<Args...>>::into(oss);
 	oss << "}";
 	return oss;
 }

@@ -4,15 +4,7 @@
 #include "properties/details/operation_macros.hpp"
 #include "properties/details/define_property.hpp"
 #include "properties/details/define_operator_base.hpp"
-#include "properties/meta/tuple.hpp"
-
-#define PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS(fun) \
-	fun(<, less)\
-	fun(<=, less_equal)\
-	fun(>, greater)\
-	fun(>=, greater_equal)\
-	fun(==, equal_to)\
-	fun(!=, not_equal_to)
+#include "properties/operators/comparison.hpp"
 
 #define PTY_DETAILS_APPLY_TO_TRANSITIVE_COMPARISON_OPERATORS(fun) \
 	fun(==, Comparable) \
@@ -24,25 +16,27 @@
 	fun(<=, >=, Comparable) \
 	fun(>=, <=, Comparable) \
 
+#define PTY_DETAILS_DEFINE_INNER_PROPS \
+	template<class _pty_Op, class ..._pty_Args, class = pty::meta::disable_for<_pty_Op, pty::operators::comparison>>\
+	constexpr inline bool operator_base(const _pty_Op& op, _pty_Args&&... args) { \
+		return Base::operator_base(op, std::forward<_pty_Args>(args)...);\
+	}\
+	template<class _pty_Op, class ..._pty_Args, class = pty::meta::disable_for<_pty_Op, pty::operators::comparison>>\
+	constexpr inline bool operator_base(const _pty_Op& op, _pty_Args&&... args) const { \
+		return Base::operator_base(op, std::forward<_pty_Args>(args)...);\
+	}\
+	template<class Op, class ...Args, class = pty::meta::enable_for<Op, pty::operators::comparison>> \
+		inline constexpr bool operator_base(const Op& op, const Args&... args) const { \
+			return op(downcast(this).operator_base(pty::operators::cast()), args...); \
+		} \
+
 
 namespace pty {
-
-    namespace operators {
-      PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS(PTY_DETAILS_DEFINE_BINARY_CONST_OPERATION) 
-
-      typedef pty::meta::tuple<	pty::operators::less, 
-              pty::operators::greater, 
-              pty::operators::less_equal, 
-              pty::operators::greater_equal, 
-              pty::operators::equal_to, 
-              pty::operators::not_equal_to
-                  > comparison;
-    }
 
 	PTY_DETAILS_DEFINE_PROPERTY(Comparable,
 
 		PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS(PTY_DETAILS_DEFINE_BINARY_CONST_OPERATOR)
-        PTY_DETAILS_DEFINE_OPERATOR_BASE(comparison)
+		PTY_DETAILS_DEFINE_INNER_PROPS
 
 		)
 
@@ -53,5 +47,6 @@ namespace pty {
 #undef PTY_DETAILS_APPLY_TO_COMPARISON_OPERATORS
 #undef PTY_DETAILS_APPLY_TO_TRANSITIVE_COMPARISON_OPERATORS
 #undef PTY_DETAILS_APPLY_TO_REVERSABLE_COMPARISON_OPERATORS
+#undef PTY_DETAILS_DEFINE_INNER_PROPS
 
 #endif
