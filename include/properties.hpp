@@ -1,16 +1,20 @@
 #ifndef GUARD_PTY_PROPERTIES_HPP__
 #define GUARD_PTY_PROPERTIES_HPP__
 
-#include "properties/details/properties.hpp"
+//#include "properties/details/properties.hpp"
 #include "properties/adaptor.hpp"
 #include <utility>
 
 namespace pty {
 
     template<class T, template<class> class ...Args>
-        struct Properties : details::Properties<T, Args<T>...> {
-			using details::Properties<T, Args<T>...>::operator=;
+        struct Properties;
+	template<class T, template<class> class Attribute, template<class>class...Args>
+		struct Properties<T, Attribute, Args...> : Attribute<Properties<T, Args...>>{
+			using Attribute<Properties<T, Args...>>::operator=;
         };
+	template<class T>
+		struct Properties<T> { };
 
 #define PTY_FORWARD_OPERATOR_BASE(Base) \
 	template<class _pty_Op, class ..._pty_Args>\

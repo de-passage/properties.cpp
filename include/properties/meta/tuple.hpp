@@ -5,6 +5,8 @@ namespace pty {
 	namespace meta {
 		template<class ...N>
 			struct tuple {};
+		template<template<class>class ...N>
+			struct template_tuple {};
 	}
 }
 

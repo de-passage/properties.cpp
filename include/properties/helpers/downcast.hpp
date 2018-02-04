@@ -1,7 +1,7 @@
 #ifndef GUARD_PTY_DOWNCAST_HPP__
 #define GUARD_PTY_DOWNCAST_HPP__
 
-#include "properties/details/properties.hpp"
+#include "properties.hpp"
 #include "../adaptor.hpp"
 
 namespace pty {
@@ -10,11 +10,11 @@ namespace pty {
     template<class T>
       struct _down;
     template<class T, template<class> class A, template<class>class ...Args>
-      struct _down<A<pty::details::Properties<T, Args<T>...>>> {
+      struct _down<A<pty::Properties<T, Args...>>> {
         typedef T value;
       };
     template<class T, template<class> class A, template<class>class ...Args>
-      struct _down<const A<pty::details::Properties<T, Args<T>...>>> {
+      struct _down<const A<pty::Properties<T, Args...>>> {
         typedef const T value;
       };
 

@@ -3,9 +3,20 @@
 
 #include "properties/details/define_operation.hpp"
 
+#include <utility>
+
 namespace pty {
 	namespace operators {
-		PTY_DETAILS_DEFINE_BINARY_MUTABLE_OPERATION(=, assign)	
+		struct assign {
+			template<class T, class Q>
+				constexpr inline decltype(auto) operator()(T&& receiver, const Q& model) const {
+					return receiver = model;
+				}
+			template<class T, class Q>
+				constexpr inline decltype(auto) operator()(T&& receiver, Q&& model) const {
+					return receiver = std::forward<Q>(model);
+				}
+		};
 	}
 }
 

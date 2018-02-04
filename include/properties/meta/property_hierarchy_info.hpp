@@ -1,7 +1,7 @@
 #ifndef GUARD_PTY_META_GET_BASE_HPP__
 #define GUARD_PTY_META_GET_BASE_HPP__
 
-#include "properties/details/properties.hpp"
+#include "properties.hpp"
 #include "properties/meta/tuple.hpp"
 
 namespace pty {
@@ -11,32 +11,32 @@ namespace pty {
         struct get_base_t {
 			typedef T value;
 		};
-      template<class T, class ...Args>
-        struct get_base_t<pty::details::Properties<T, Args...>> {
+      template<class T, template<class>class ...Args>
+        struct get_base_t<pty::Properties<T, Args...>> {
           typedef T value;
         };
-      template<template<class> class Prop, class T, class ...Args>
-        struct get_base_t<const Prop<pty::details::Properties<T, Args...>>&> {
+      template<template<class> class Prop, class T, template<class>class ...Args>
+        struct get_base_t<const Prop<pty::Properties<T, Args...>>&> {
           typedef T value;
         };
-      template<template<class> class Prop, class T, class ...Args>
-        struct get_base_t<Prop<pty::details::Properties<T, Args...>>> {
+      template<template<class> class Prop, class T, template<class>class ...Args>
+        struct get_base_t<Prop<pty::Properties<T, Args...>>> {
           typedef T value;
         };
 
       template<class T>
         struct get_properties_t;
-      template<class T, class ...Args>
-        struct get_properties_t<pty::details::Properties<T, Args...>> {
-          typedef pty::meta::tuple<Args...> value;
+      template<class T, template<class>class ...Args>
+        struct get_properties_t<pty::Properties<T, Args...>> {
+          typedef pty::meta::template_tuple<Args...> value;
         };
-      template<template<class> class Prop, class T, class ...Args>
-        struct get_properties_t<Prop<pty::details::Properties<T, Args...>>> {
-          typedef pty::meta::tuple<Args...> value;
+      template<template<class> class Prop, class T, template<class>class ...Args>
+        struct get_properties_t<Prop<pty::Properties<T, Args...>>> {
+          typedef pty::meta::template_tuple<Args...> value;
         };
-      template<template<class> class Prop, class T, class ...Args>
-        struct get_properties_t<const Prop<pty::details::Properties<T, Args...>>&> {
-          typedef pty::meta::tuple<Args...> value;
+      template<template<class> class Prop, class T, template<class>class ...Args>
+        struct get_properties_t<const Prop<pty::Properties<T, Args...>>&> {
+          typedef pty::meta::template_tuple<Args...> value;
         };
     }
 
