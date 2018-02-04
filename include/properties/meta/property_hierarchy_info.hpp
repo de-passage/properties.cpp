@@ -8,7 +8,9 @@ namespace pty {
   namespace meta {
     namespace details {
       template<class T>
-        struct get_base_t;
+        struct get_base_t {
+			typedef T value;
+		};
       template<class T, class ...Args>
         struct get_base_t<pty::details::Properties<T, Args...>> {
           typedef T value;

@@ -17,12 +17,12 @@
 	}\
 	template<class Op, class ...Args, class O = Op, class = pty::meta::enable_for<O, pty::operators::oper>> \
 		inline constexpr decltype(auto) operator_base(const Op& op, Args&&... args) const { \
-			auto tmp = op(downcast(this).operator_base(pty::operators::cast()), args...); \
+			auto tmp = op(downcast(this).operator_base(pty::operators::cast()), std::forward<Args>(args)...); \
 			return pty::meta::get_base<decltype(*this)>(tmp); \
 		} \
-	template<class Op, class ...Args, class O = Op, class = pty::meta::enable_for<Op, pty::operators::oper>> \
+	template<class Op, class ...Args, class O = Op, class = pty::meta::enable_for<O, pty::operators::oper>> \
 		inline constexpr auto& operator_base(const Op& op, Args&&... args) { \
-			op(downcast(this).operator_base(pty::operators::cast()), args...); \
+			op(downcast(this).operator_base(pty::operators::cast()), std::forward<Args>(args)...); \
 			return *downcast(this).self; \
 		} \
 	using Base::operator=;

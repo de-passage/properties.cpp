@@ -36,70 +36,10 @@ namespace pty {
 	template<class Base, template<class> class ...Args>
 		// Forward properties and add comparable, arithmetic and bitwise to them
 		struct Numeric<details::Properties<Base, Args<Base>...>> : details::Properties<Base, Comparable<Base>, Arithmetic<Base>, Bitwise<Base>, Incrementable<Base>, Args<Base>...>{
-			private:
-				typedef details::Properties<Base, Comparable<Base>, Arithmetic<Base>, Bitwise<Base>, Incrementable<Base>, Args<Base>...> Parent;
-				typedef Numeric<details::Properties<Base, Args<Base>...>> Self;
-
-				template<class Op, class T>
-					constexpr static inline pty::apply<Op, T> apply_left(const Op&, const T& t) {
-						return pty::apply<Op, T>{Op(), t};
-					}
-				template<class Op>
-					constexpr static inline pty::apply<Op> apply(const Op&) {
-						return pty::apply<Op>();
-					}
-			constexpr static auto cast_to_valid_type(const Numeric& i) {
-				return downcast(&i).operator_base(pty::operators::cast());
-			}
-
-			using _perms = pty::permissions::get<Parent>;
-
-			public:
-			using Parent::operator=;
-
 			protected:
-				~Numeric() = default;
-				friend pty::adaptor<Base>;
-				friend pty::adaptor<const Base>;
-			template<class Op, class = pty::enable_for<Op, pty::arithmetic_operations, pty::increment_operations>>
-				constexpr auto operator_base(const Op& op) {
-					return downcast(this).operator_base(Numeric::apply(op));
-				}
+				typedef details::Properties<Base, Comparable<Base>, Arithmetic<Base>, Bitwise<Base>, Incrementable<Base>, Args<Base>...> Parent;
+				using Parent::operator=;
 
-			template<class Op, class = pty::enable_for<Op, pty::comparison_operation>>
-				constexpr bool operator_base(const Op& op, const Numeric& i) const {
-					return downcast(this).operator_base(Numeric::apply_left(op, Numeric::cast_to_valid_type(i)));
-				}
-
-			template<class Op, class = pty::enable_for<Op, pty::arithmetic_operations, pty::bitwise_operations>>
-				constexpr auto operator_base(const Op& op, const Numeric& i) const {
-					return downcast(this).operator_base(Numeric::apply_left(op, Numeric::cast_to_valid_type(i)));
-				}
-
-			template<class Op, class = pty::enable_for<Op, pty::arithmetic_operations, pty::bitwise_operations>>
-				constexpr Base operator_base(const Op& op, const Numeric& i) {
-					return downcast(this).operator_base(Numeric::apply_left(op, Numeric::cast_to_valid_type(i)));
-				}
-//*
-			template<class Op, class T, class = pty::enable_for<Op, pty::comparison_operation>, class = std::enable_if_t<!std::is_base_of<Numeric, T>::value>>
-				constexpr bool operator_base(const Op& op, const T& i) const {
-					return downcast(this).operator_base(Numeric::apply_left(op, i));
-				}
-
-			template<class Op, class T, class = pty::enable_for<Op, pty::arithmetic_operations, pty::bitwise_operations>, class = std::enable_if_t<!std::is_base_of<Numeric, T>::value>>
-				constexpr auto operator_base(const Op& op, const T& i) const {
-					return downcast(this).operator_base(Numeric::apply_left(op, i));
-				}
-
-			template<class Op, class T, class = pty::enable_for<Op, pty::arithmetic_operations, pty::bitwise_operations>, class = std::enable_if_t<!std::is_base_of<Numeric, T>::value>>
-				constexpr Base operator_base(const Op& op, const T& i) {
-					return downcast(this).operator_base(Numeric::apply_left(op, i));
-				}
-			template<class Op, class T, class = pty::enable_for<Op, pty::assign>>
-				constexpr auto operator_base(const Op& op, const T& i) {
-					return downcast(this).operator_base(Numeric::apply_left(op, i));
-				}
-				//*/
 
 		};
 }

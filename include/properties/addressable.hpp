@@ -1,39 +1,62 @@
 #ifndef GUARD_PTY_ADDRESSABLE_HPP__
 #define GUARD_PTY_ADDRESSABLE_HPP__
 
-#include "properties/details/define_property.hpp"
-#include "properties/apply.hpp"
+#include "properties/meta/enable_for.hpp"
+#include "properties/operators/index.hpp"
+#include "properties/operators/cast.hpp"
+#include "properties/helpers/downcast.hpp"
 
 #include <stddef.h>
+#include <utility>
 
 namespace pty {
-
-	namespace operations {
-
-		struct index {
-			template<class T>
-			constexpr inline auto& operator()(T& obj, size_t index) const {
-				return obj[index];
-			}
-			template<class T>
-			constexpr inline auto operator()(const T& obj, size_t index) const {
-				return obj[index];
-			}
-		};
-
-	}
 
 	template<class T>
 		struct Addressable : T {
 			using T::operator=;
 
-			constexpr inline auto operator[](size_t index) const {
-				return downcast(this).operator_base(apply<operations::index, size_t>{{}, {index}});
+			template<class U>
+			constexpr inline decltype(auto) operator[](U&& index) const {
+				return downcast(this).operator_base(operators::index(), std::forward<U>(index));
 			}
 
-			constexpr inline auto& operator[](size_t index) {
-				return downcast(this).operator_base(apply<operations::index, size_t>{{}, {index}});
+			template<class U>
+			constexpr inline decltype(auto) operator[](U&& index) {
+				return downcast(this).operator_base(operators::index(), std::forward<U>(index));
 			}
+
+			constexpr inline decltype(auto) operator*() const {
+				return downcast(this).operator_base(operators::dereference());
+			}
+			constexpr inline decltype(auto) operator->() const {
+				return downcast(this).operator_base(operators::dereference_member());
+			}
+
+			constexpr inline decltype(auto) operator*() {
+				return downcast(this).operator_base(operators::dereference());
+			}
+			constexpr inline decltype(auto) operator->() {
+				return downcast(this).operator_base(operators::dereference_member());
+			}
+
+			template<class Op, class ...Args, class = pty::meta::enable_for<Op, pty::operators::address>>
+            constexpr inline decltype(auto) operator_base(Op op, Args&&... index) {
+                return op(downcast(this).operator_base(pty::operators::cast()), std::forward<Args>(index)...);
+            }
+
+			template<class Op, class ...Args, class = pty::meta::enable_for<Op, pty::operators::address>>
+            constexpr inline decltype(auto) operator_base(Op op, Args&&... index) const {
+                return op(downcast(this).operator_base(pty::operators::cast()), std::forward<Args>(index)...);
+            }
+
+            template<class _pty_Op, class ..._pty_Args, class = pty::meta::disable_for<_pty_Op, pty::operators::address>>
+            constexpr inline decltype(auto) operator_base(const _pty_Op& op, _pty_Args&&... args) { 
+                return T::operator_base(op, std::forward<_pty_Args>(args)...);
+            }
+            template<class _pty_Op, class ..._pty_Args, class = pty::meta::disable_for<_pty_Op, pty::operators::address>>
+            constexpr inline decltype(auto) operator_base(const _pty_Op& op, _pty_Args&&... args) const { 
+                return T::operator_base(op, std::forward<_pty_Args>(args)...);
+            }
 		};
 
 

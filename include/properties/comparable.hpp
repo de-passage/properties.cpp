@@ -18,16 +18,16 @@
 
 #define PTY_DETAILS_DEFINE_INNER_PROPS \
 	template<class _pty_Op, class ..._pty_Args, class = pty::meta::disable_for<_pty_Op, pty::operators::comparison>>\
-	constexpr inline bool operator_base(const _pty_Op& op, _pty_Args&&... args) { \
+	constexpr inline decltype(auto) operator_base(const _pty_Op& op, _pty_Args&&... args) { \
 		return Base::operator_base(op, std::forward<_pty_Args>(args)...);\
 	}\
 	template<class _pty_Op, class ..._pty_Args, class = pty::meta::disable_for<_pty_Op, pty::operators::comparison>>\
-	constexpr inline bool operator_base(const _pty_Op& op, _pty_Args&&... args) const { \
+	constexpr inline decltype(auto) operator_base(const _pty_Op& op, _pty_Args&&... args) const { \
 		return Base::operator_base(op, std::forward<_pty_Args>(args)...);\
 	}\
 	template<class Op, class ...Args, class = pty::meta::enable_for<Op, pty::operators::comparison>> \
-		inline constexpr bool operator_base(const Op& op, const Args&... args) const { \
-			return op(downcast(this).operator_base(pty::operators::cast()), args...); \
+		inline constexpr bool operator_base(const Op& op, Args&&... args) const { \
+			return op(downcast(this).operator_base(pty::operators::cast()), std::forward<Args>(args)...); \
 		} \
 
 

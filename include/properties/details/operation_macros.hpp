@@ -5,8 +5,8 @@
 
 #define PTY_DETAILS_DEFINE_BINARY_OPERATOR(sym, op, const_q) \
 	template<class T> \
-		inline constexpr decltype(auto) operator sym (const T& t) const_q { \
-			return downcast(this).operator_base(pty::operators:: op(),t);\
+		inline constexpr decltype(auto) operator sym (T&& t) const_q { \
+			return downcast(this).operator_base(pty::operators:: op(), std::forward<T>(t));\
 		}
 
 #define PTY_DETAILS_DEFINE_UNARY_OPERATOR(sym, op, const_q) \
