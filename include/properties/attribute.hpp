@@ -26,10 +26,10 @@ namespace pty {
 			public:
 				PTY_FORWARD_OPERATOR_BASE(Base)
 				constexpr Attribute() : value() {}
-				constexpr explicit Attribute(const T& t) : value(t) {}
+				constexpr Attribute(const T& t) : value(t) {}
 				template<class Q, class O, template<class>class...P>
-					constexpr explicit Attribute(const Attribute<Q, O, P...>& t) : value(static_cast<T>(t.value)) {}
-				constexpr explicit Attribute(T&& t) : value(std::move(t)) {}
+					constexpr explicit Attribute(const Attribute<Q, O, P...>& t) : value(static_cast<T>(t)) {}
+				constexpr Attribute(T&& t) : value(std::move(t)) {}
 				constexpr Attribute(Attribute&& t) : value(std::move(t.value)) {}
 				constexpr Attribute(const Attribute& t) : value(t.value) {}
 

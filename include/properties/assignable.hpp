@@ -19,7 +19,7 @@ namespace pty {
 			template<class Q, class = std::enable_if_t<!std::is_same<std::remove_reference_t<Q>, pty::meta::get_base<Base>>::value>>
 				inline decltype(auto) operator=(const Q& t) {
 					downcast(this).operator_base(pty::operators::assign(), t);
-					return *downcast(this).self;\
+					return *downcast(this).self;
 				}
 
 			template<class Q, class = std::enable_if_t<!std::is_same<std::remove_reference_t<Q>, pty::meta::get_base<Base>>::value>>
@@ -31,7 +31,7 @@ namespace pty {
 			template<class P, class Q = P, class = std::enable_if_t<std::is_same<std::remove_reference_t<Q>, pty::meta::get_base<Base>>::value>>
 				inline decltype(auto) operator=(const Q& t) {
 					downcast(this).operator_base(pty::operators::assign(), downcast(t).operator_base(pty::operators::cast()));
-					return *downcast(this).self;\
+					return *downcast(this).self;
 				}
 
 			template<class P, class Q = P, class = std::enable_if_t<std::is_same<std::remove_reference_t<Q>, pty::meta::get_base<Base>>::value>>
@@ -43,4 +43,15 @@ namespace pty {
 		};
 #undef INNER_PROPS
 }
+
+#define PTY_DEFINE_ASSIGNMENT_OPERATOR(Class) \
+	Class& operator=(const Class& t) { \
+		operator_base(pty::operators::assign(),t.value); \
+		return *this; \
+	} \
+\
+	Class& operator=(Class&& t) {\
+		operator_base(pty::operators::assign(),t.value);\
+		return *this;\
+	}
 #endif // GUARD_PTY_ASSIGNABLE_HPP__
