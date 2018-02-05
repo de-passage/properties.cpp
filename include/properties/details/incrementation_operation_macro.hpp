@@ -1,0 +1,8 @@
+#ifndef GUARD_PTY_DETAILS_INCREMENTATION_OPERATION_MACRO_HPP__
+#define GUARD_PTY_DETAILS_INCREMENTATION_OPERATION_MACRO_HPP__
+
+#define PTY_DETAILS_APPLY_TO_INCREMENT_OPERATORS(op, pref) \
+	op(++, pref## increment) \
+	op(--, pref## decrement)
+
+#endif
