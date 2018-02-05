@@ -34,6 +34,11 @@ namespace pty {
 		return lhv / downcast(&rhv).operator_base(pty::operators::cast());
 	}
 
+	template<class T, class U, class = pty::details::prevent_duplication<T, Arithmetic>>
+	inline constexpr decltype(auto) operator%(const T& lhv, const Arithmetic<U>& rhv) {
+		return lhv % downcast(&rhv).operator_base(pty::operators::cast());
+	}
+
 }
 
 
