@@ -12,14 +12,28 @@ namespace pty {
 			}
 		};
 
-		struct begin_iteration {
+		struct increment_iterator {
+			template<class U, class T>
+			constexpr inline decltype(auto) operator()(T&& iterator) const {
+				return ++iterator;
+			}
+		};
+
+		struct decrement_iterator {
+			template<class U, class T>
+			constexpr inline decltype(auto) operator()(T&& iterator) const {
+				return --iterator;
+			}
+		};
+
+		struct iteration_start {
 			template<class U>
 				constexpr inline decltype(auto) operator()(U&& iterable) const {
 					return iterable.begin();
 				}
 		};
 
-		struct end_iteration {
+		struct iteration_end {
 			template<class U>
 				constexpr inline decltype(auto) operator()(U&& iterable) const {
 					return iterable.end();
@@ -40,7 +54,7 @@ namespace pty {
 				}
 		};
 
-		typedef pty::meta::tuple<offset_iterator, compare_iterators, begin_iteration, end_iteration> iteration;
+		typedef pty::meta::tuple<offset_iterator, increment_iterator, decrement_iterator, dereference_iterator, compare_iterators, iteration_end, iteration_start> iteration;
 	}
 }
 
