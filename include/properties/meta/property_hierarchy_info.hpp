@@ -17,6 +17,10 @@ namespace pty {
         struct get_base_t<Prop<pty::Properties<T, Args...>>> {
           typedef T value;
         };
+      template<class T, template<class>class Prop, template<class>class ...Args>
+        struct get_base_t<const Prop<pty::Properties<T, Args...>>> {
+          typedef T value;
+        };
 
       template<class T>
         struct get_properties_t;

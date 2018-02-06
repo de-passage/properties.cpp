@@ -7,6 +7,7 @@
 #include "properties/incrementable.hpp"
 #include "properties/addressable.hpp"
 #include "properties/details/deduce_iterator_tag.hpp"
+#include "properties/meta/property_hierarchy_info.hpp"
 
 #include <utility>
 
@@ -96,7 +97,7 @@ namespace pty {
 
 				public:
 					typedef std::remove_reference_t<decltype(downcast(std::declval<Iter*>()).operator_base(pty::operators::dereference_iterator(), std::declval<_iterator_type>()))> value_type;
-					typedef details::deduce_iterator_tag<Iterator> iterator_category;
+					typedef details::deduce_iterator_tag<pty::meta::get_base<Iter>, _iterator_type> iterator_category;
 
 					constexpr Iterator(_iterator_type target = _iterator_type(), Iter* source = nullptr) : _ref(source), _iter(target) {}
 					constexpr Iterator(const Iterator& source) : _ref(source._ref), _iter(source._iter) {}
