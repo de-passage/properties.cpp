@@ -6,6 +6,7 @@
 #include "properties/meta/enable_for.hpp"
 #include "properties/incrementable.hpp"
 #include "properties/addressable.hpp"
+#include "properties/comparable.hpp"
 #include "properties/details/deduce_iterator_tag.hpp"
 #include "properties/meta/property_hierarchy_info.hpp"
 
@@ -16,16 +17,6 @@ namespace pty {
 
 	template<class Base>
 		struct Iterable : Base {
-
-			template<class _pty_Op, class ..._pty_Args, class = pty::meta::disable_for<_pty_Op, pty::operators::iteration>>
-				constexpr inline decltype(auto) operator_base(const _pty_Op& op, _pty_Args&&... args) { 
-					return Base::operator_base(op, std::forward<_pty_Args>(args)...);
-				}
-
-			template<class _pty_Op, class ..._pty_Args, class = pty::meta::disable_for<_pty_Op, pty::operators::iteration>>
-				constexpr inline decltype(auto) operator_base(const _pty_Op& op, _pty_Args&&... args) const { 
-					return Base::operator_base(op, std::forward<_pty_Args>(args)...);
-				}
 
 			using Base::operator=;
 
@@ -38,6 +29,23 @@ namespace pty {
 			constexpr inline const_iterator cend() const;
 			constexpr inline iterator begin();
 			constexpr inline iterator end();
+
+			protected:
+			template<class _pty_Op, class ..._pty_Args, class = pty::meta::disable_for<_pty_Op, pty::operators::iteration>>
+				constexpr inline decltype(auto) operator_base(const _pty_Op& op, _pty_Args&&... args) { 
+					return Base::operator_base(op, std::forward<_pty_Args>(args)...);
+				}
+
+			template<class _pty_Op, class ..._pty_Args, class = pty::meta::disable_for<_pty_Op, pty::operators::iteration>>
+				constexpr inline decltype(auto) operator_base(const _pty_Op& op, _pty_Args&&... args) const { 
+					return Base::operator_base(op, std::forward<_pty_Args>(args)...);
+				}
+
+			template<class T>
+			constexpr inline iterator make_iterator(T&& obj);
+			template<class T>
+			constexpr inline const_iterator make_iterator(T&& obj) const;
+
 
 		};
 
@@ -71,10 +79,22 @@ namespace pty {
 			return end();
 		}
 
+	template<class Base>
+		template<class T>
+		constexpr inline typename Iterable<Base>::iterator Iterable<Base>::make_iterator(T&& iter) {
+			return Iterable<Base>::iterator(std::forward<T>(iter), this);
+		}
+
+	template<class Base>
+		template<class T>
+		constexpr inline typename Iterable<Base>::const_iterator Iterable<Base>::make_iterator(T&& iter) const {
+			return Iterable<Base>::const_iterator(std::forward<T>(iter), this);
+		}
+
 	namespace details {
 
 		template<class Iter>
-			struct Iterator : pty::Properties<Iterator<Iter>, pty::Incrementable, pty::Addressable> {
+			struct Iterator : pty::Properties<Iterator<Iter>, pty::Incrementable, pty::Addressable, pty::Comparable> {
 
 				private:
 					friend pty::adaptor<Iterator>;
@@ -91,26 +111,72 @@ namespace pty {
 						}
 
 					typedef decltype(downcast(std::declval<std::remove_const_t<Iter>*>()).operator_base(pty::operators::iteration_start())) _iterator_type;
+					typedef pty::meta::get_base<Iter> Base;
 
 					Iter* _ref;
 					_iterator_type _iter;
 
 				public:
 					typedef std::remove_reference_t<decltype(downcast(std::declval<Iter*>()).operator_base(pty::operators::dereference_iterator(), std::declval<_iterator_type>()))> value_type;
-					typedef details::deduce_iterator_tag<pty::meta::get_base<Iter>, _iterator_type> iterator_category;
+					typedef details::deduce_iterator_tag<Base, _iterator_type> iterator_category;
 
-					constexpr Iterator(_iterator_type target = _iterator_type(), Iter* source = nullptr) : _ref(source), _iter(target) {}
-					constexpr Iterator(const Iterator& source) : _ref(source._ref), _iter(source._iter) {}
+					constexpr inline Iterator(_iterator_type&& target = _iterator_type(), Iter* source = nullptr) : _ref(source), _iter(std::forward<_iterator_type>(target)) {}
+					constexpr inline Iterator(const _iterator_type& target = _iterator_type(), Iter* source = nullptr) : _ref(source), _iter(target) {}
+					constexpr inline Iterator(const Iterator& source) : _ref(source._ref), _iter(source._iter) {}
+
+					constexpr inline operator _iterator_type& () {
+						return _iter;
+					}
 
 				private:
 					template<class Op, class = pty::meta::enable_for<Op, pty::operators::address>>
-						constexpr inline value_type& operator_base(Op) {
+						constexpr inline decltype(auto) operator_base(Op) {
 							return _forward_to_ref(pty::operators::dereference_iterator(), _iter);
 						}
 					template<class Op, class = pty::meta::enable_for<Op, pty::operators::address>>
-						constexpr inline value_type operator_base(Op) const {
+						constexpr inline decltype(auto) operator_base(Op) const {
 							return _forward_to_ref(pty::operators::dereference_iterator(), _iter);
 						}
+
+					template<class B = Base, class = std::enable_if_t<pty::meta::has_operator_base_overload<B, pty::operators::offset_iterator>>>
+						constexpr inline Iterator& operator_base(pty::operators::prefix_increment) {
+							*this = _forward_to_ref(pty::operators::offset_iterator(), _iter, 1);
+							return *this;
+						}
+
+					constexpr inline Iterator& operator_base(pty::operators::prefix_increment) {
+							*this = _forward_to_ref(pty::operators::increment_iterator(), _iter);
+							return *this;
+						}
+
+					template<class B = Base, class = std::enable_if_t<pty::meta::has_operator_base_overload<B, pty::operators::offset_iterator>>>
+						constexpr inline Iterator& operator_base(pty::operators::prefix_decrement) {
+							*this = _forward_to_ref(pty::operators::offset_iterator(), _iter, -1);
+							return *this;
+						}
+
+					constexpr inline Iterator operator_base(pty::operators::prefix_decrement) {
+							 *this = _forward_to_ref(pty::operators::decrement_iterator(), _iter);
+							 return *this;
+						}
+
+					constexpr inline Iterator operator_base(pty::operators::suffix_increment) {
+						auto tmp = *this;
+						*this = operator_base(pty::operators::prefix_increment());
+						return tmp;
+					}
+
+					constexpr inline Iterator operator_base(pty::operators::suffix_decrement) {
+						auto tmp = *this;
+						*this = operator_base(pty::operators::prefix_decrement());
+						return tmp;
+					}
+
+					template<class Op, class = pty::meta::enable_for<Op, pty::operators::comparison>>
+					constexpr inline bool operator_base(Op op, const Iterator& iter) const {
+						return _forward_to_ref(pty::operators::compare_iterators(), op, _iter, iter._iter);
+					}
+
 
 			};
 	}
