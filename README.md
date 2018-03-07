@@ -12,9 +12,10 @@ The following example defines a class behaving in the exact same way as a built-
 #include <iostream>
 
 struct Int : 
-	pty::Properties<Int,	// Declare our class to the framework
-	pty::Numeric,			// Make it numeric, i.e. declare the operators +, +=, -, -=, ^, ^=, ==, <=, etc
-	pty::Streamable> {		// Make it compatible with stream operations. Make it possible to call std::cout << Int() or std::cin >> Int()
+	pty::Properties<Int, // Declare our class to the framework
+	pty::Numeric,        // Make it numeric, i.e. declare the operators +, +=, -, -=, ^, ^=, ==, <=, etc
+	pty::Streamable> {	 // Make it compatible with stream operations. 
+	                     // i.e. make it possible to call std::cout << Int() or std::cin >> Int()
 
 	// Ctor
 	constexpr Int(int v) : value(v) {}
@@ -24,14 +25,17 @@ struct Int :
 	int value;
 	using Base = pty::Properties<Int, pty::Numeric, pty::Streamable>;
 
-	// Without these, the framework can't access private functions and the next declarations would need to be public
+	// Without these, the framework can't access private functions and
+	// the next declarations would need to be public
 	friend pty::adaptor<Int>;
 	friend pty::adaptor<const Int>;
 
-	// This part exposes our member to the framework, essentially replacing our class by the return value of this function every time an operator is called
+	// This part exposes our member to the framework, essentially replacing our class
+	// by the return value of this function every time an operator is called
 	constexpr inline int& operator_base(const pty::operators::cast&) {
 		return value; 
 	}
+
 	// const version. May be removed in future iterations of the framework
 	constexpr inline int operator_base(const pty::operators::cast&) const {
 		return value;
@@ -99,11 +103,13 @@ struct Int : pty::Properties<Int, pty::Numeric, pty::Streamable> {
 	int value;
 	using Base = pty::Properties<Int, pty::Numeric, pty::Streamable>;
 
-	// Without these, the framework can't access private functions and the next declarations would need to be public
+	// Without these, the framework can't access private functions
+	// and the next declarations would need to be public
 	friend pty::adaptor<Int>;
 	friend pty::adaptor<const Int>;
 
-	// The two next functions define how the operations should be handled. In our case we log the operator and the arguments, 
+	// The two next functions define how the operations should be handled.
+	// In our case we log the operator and the arguments, 
 	// then forward to the default behaviour
 	template<class Operator, class...Args>
 		constexpr inline decltype(auto) operator_base(const Operator& op, Args&&... args) {
@@ -112,6 +118,7 @@ struct Int : pty::Properties<Int, pty::Numeric, pty::Streamable> {
 			return Base::operator_base(op, std::forward<Args>(args)...); // and forward
 
 		}
+
 	// Const version of above. May be removed in future iterations of the framework
 	template<class Operator, class...Args>
 		constexpr inline decltype(auto) operator_base(const Operator& op, Args&&... args) const {
@@ -123,6 +130,7 @@ struct Int : pty::Properties<Int, pty::Numeric, pty::Streamable> {
 	constexpr inline int& operator_base(const pty::operators::cast&) {
 		return value; //
 	}
+
 	// const version. May be removed in future iterations of the framework
 	constexpr inline int operator_base(const pty::operators::cast&) const {
 		return value;

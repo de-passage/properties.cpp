@@ -100,4 +100,7 @@ int main() {
 	static_assert(std::is_same<MyList<int>::iterator::iterator_category, std::forward_iterator_tag>::value, "");
 
 	std::cout << "Test `iterable` passed" << std::endl;
+#ifndef PTY_TEST_INCLUDE_ALL_TESTS
+	return 0;
+#endif
 }
