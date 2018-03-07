@@ -11,5 +11,18 @@
 #include "properties/operators/iteration.hpp"
 #include "properties/operators/stream.hpp"
 
-#endif // GUARD_PTY_OPERATORS_HPP__
+namespace pty { namespace operators {
+typedef pty::meta::tuple<
+	arithmetic,
+	assign,
+	bitwise,
+	cast,
+	comparison,
+	shift,
+	index,
+	iteration,
+	stream
+		>	 all;
+} }
 
+#endif // GUARD_PTY_OPERATORS_HPP__
