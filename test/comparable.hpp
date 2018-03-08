@@ -43,6 +43,10 @@ struct ComparableTestCastOperator : pty::Properties<ComparableTestCastOperator,p
 
 	int value;
 
+	constexpr inline int& operator_base(pty::operators::cast) {
+		return value;
+	}
+
 	constexpr inline int operator_base(pty::operators::cast) const {
 		return value;
 	}
@@ -193,8 +197,8 @@ int main() {
 	static_assert(std::is_same<decltype(test3 >= test2_42), bool>::value, "");
 	static_assert(std::is_same<decltype(test2_42 >= test3), bool>::value, "");
 	std::cout << "Test `comparable` passed with success" << std::endl;
-}
 #ifndef PTY_TEST_INCLUDE_ALL_TESTS
 	return 0;
 #endif
 
+}

@@ -42,10 +42,12 @@ struct MyList : pty::Properties<MyList<T>, pty::Iterable>{
 		return iterator->next;
 	}
 
+	//*
 	template<class Iter>
 	int operator_base(pty::operators::dereference_iterator, Iter&& iter) const {
 		return iter->value;
 	}
+	//*/
 
 	template<class Iter>
 	int& operator_base(pty::operators::dereference_iterator, Iter&& iter) {
@@ -83,6 +85,7 @@ int main() {
 #endif
 
 	MyList<int> list;
+
 	static_assert(std::is_same<decltype(*list.begin()), int&>::value, "");
 	static_assert(std::is_same<decltype(*list.cbegin()), int>::value, "");
 

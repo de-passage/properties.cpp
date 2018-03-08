@@ -25,17 +25,17 @@ namespace pty {
 	PTY_DETAILS_APPLY_TO_ARITHMETIC_TRANSITIVE_OPERATORS(PTY_DETAILS_DEFINE_TRANSITIVE_OPERATOR)
 
 	template<class T, class U, class = pty::details::prevent_duplication<T, Arithmetic>>
-	inline constexpr decltype(auto) operator-(const T& lhv, const Arithmetic<U>& rhv) {
+	inline constexpr auto operator-(const T& lhv, const Arithmetic<U>& rhv) {
 		return -(rhv) + lhv;
 	}
 
 	template<class T, class U, class = pty::details::prevent_duplication<T, Arithmetic>>
-	inline constexpr decltype(auto) operator/(const T& lhv, const Arithmetic<U>& rhv) {
+	inline constexpr auto operator/(const T& lhv, const Arithmetic<U>& rhv) {
 		return lhv / downcast(&rhv).operator_base(pty::operators::cast());
 	}
 
 	template<class T, class U, class = pty::details::prevent_duplication<T, Arithmetic>>
-	inline constexpr decltype(auto) operator%(const T& lhv, const Arithmetic<U>& rhv) {
+	inline constexpr auto operator%(const T& lhv, const Arithmetic<U>& rhv) {
 		return lhv % downcast(&rhv).operator_base(pty::operators::cast());
 	}
 
