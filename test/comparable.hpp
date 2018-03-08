@@ -151,7 +151,7 @@ int main() {
 	assert(test3 >= 42);
 	assert(42 >= test3);
 
-    ComparableTestCastOperator test2_24{24}, test2_84{84}, test2_42{42};
+    const ComparableTestCastOperator test2_24{24}, test2_84{84}, test2_42{42};
 	assert(test == test2_42);
 	assert(test2_42 == test3);
 	assert(test3 != test2_24);
