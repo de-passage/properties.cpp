@@ -29,6 +29,8 @@ namespace pty {
 		return -(rhv) + lhv;
 	}
 
+	/* Buggy
+	 *
 	template<class T, class U, class = pty::details::prevent_duplication<T, Arithmetic>>
 	inline constexpr auto operator/(const T& lhv, const Arithmetic<U>& rhv) {
 		return lhv / downcast(&rhv).operator_base(pty::operators::cast());
@@ -38,6 +40,7 @@ namespace pty {
 	inline constexpr auto operator%(const T& lhv, const Arithmetic<U>& rhv) {
 		return lhv % downcast(&rhv).operator_base(pty::operators::cast());
 	}
+	//*/
 
 }
 

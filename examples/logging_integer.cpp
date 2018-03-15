@@ -2,17 +2,11 @@
 #include "properties/numeric.hpp"
 #include "properties/streamable.hpp"
 
+#include "properties/helpers/printable_operators.hpp"
+
 #include <iostream>
 
 namespace details {
-
-	std::string _dispatch(pty::operators::stream_out) {
-		return "operator<<";
-	}
-
-	std::string _dispatch(pty::operators::plus) {
-		return "operator+";
-	}
 
 	template<class T>
 	void _print(const T& t) { std::cout << t; }
@@ -28,7 +22,7 @@ namespace details {
 
 	template<class Op, class ...Args>
 		void print_operation(const Op& op, const Args&... args) {
-			std::cout << _dispatch(op) << "(";
+			std::cout << op << "(";
 			_print(args...);
 			std::cout << ") called." << std::endl;
 		}
@@ -79,10 +73,16 @@ struct Int :
 
 int main() {
 	Int i(42);
-	std::cout << i << std::endl; // print "operator<<(std::ostream) called" then "42" 
+	std::cout << i << std::endl; // print "operator_stream_out(<<)(std::ostream) called" then "42" 
 	//int error = i + 10; // error no viable conversion from Int to int. 
 	
-	std::cout << i + 10 << std::endl; // Print "operator+(10) called", "operator<<(std::ostream) called", then 52
+	std::cout << i + 10 << std::endl; // Print "operator_plus(+)(10) called", "operator_stream_out(<<)(std::ostream) called", then 52
+
+	std::cout << i * 2 << std::endl;
+
+	std::cout << std::boolalpha << (i >= 0) << std::endl;
+
+	i = 9;
 
 	return 0;
 }

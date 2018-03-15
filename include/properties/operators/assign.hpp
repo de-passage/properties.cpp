@@ -16,6 +16,7 @@ namespace pty {
 				constexpr inline decltype(auto) operator()(T&& receiver, Q&& model) const {
 					return receiver = std::forward<Q>(model);
 				}
+			static constexpr const char* const name = "operator_assign(=)";
 		};
 	}
 }

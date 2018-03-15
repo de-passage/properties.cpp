@@ -19,6 +19,8 @@ namespace pty {
 						inline constexpr decltype(auto) operator()(T&& t, U&& u) const {
 							return Op<T>()(std::forward<T>(t), std::forward<U>(u));
 						}
+
+					constexpr static const char * const name = Op<stream_adaptor>::name;
 				};
 
 			// Actual operators
@@ -28,6 +30,7 @@ namespace pty {
 						inline decltype(auto) operator()(T&& oss, U&& t) const {
 							return std::forward<T>(oss) << std::forward<U>(t);
 						}
+					constexpr static const char* const name = "operator_stream_out(<<)";
 				};
 
 			template<class T>
@@ -36,6 +39,7 @@ namespace pty {
 						inline decltype(auto) operator()(T&& iss, U&& t) const {
 							return std::forward<T>(iss) >> std::forward<U>(t);
 						}
+					constexpr static const char* const name = "operator_stream_out(>>)";
 				};
 		}
 

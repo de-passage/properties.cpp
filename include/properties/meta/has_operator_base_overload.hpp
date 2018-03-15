@@ -1,6 +1,7 @@
 #ifndef GUARD_PTY_META_HAS_OPERATOR_BASE_OVERLOAD_HPP__
 #define GUARD_PTY_META_HAS_OPERATOR_BASE_OVERLOAD_HPP__
 
+#include "properties/helpers/downcast.hpp"
 #include <type_traits>
 
 namespace pty {

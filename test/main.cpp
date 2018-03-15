@@ -15,6 +15,7 @@
 #include "../test/property_hierarchy_info.hpp"
 #include "../test/iterable.hpp"
 #include "../test/has_operator_base_overload.hpp"
+#include "../test/printable_operations.hpp"
 
 int main() {
 	test_assignable();
@@ -33,6 +34,7 @@ int main() {
 	test_numeric();
 	test_iterable();
 	test_has_operator_base_overload();
+	test_printable_operations();
 
 	return 0;
 }

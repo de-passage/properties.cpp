@@ -48,6 +48,44 @@ struct ArithmeticOpBase : pty::Properties<ArithmeticOpBase, pty::Arithmetic> {
 	}
 };
 
+void test_constant_arithmetic(const ArithmeticTest& test, const ArithFullOpTest& /*no constant operator_base*/, const ArithmeticOpBase& aob) {
+	static_assert(std::is_same<decltype(test + 1), ArithmeticTest>::value, "");
+	static_assert(std::is_same<decltype(1 + test), ArithmeticTest>::value, "");
+	static_assert(std::is_same<decltype(-test), ArithmeticTest>::value, "");
+	static_assert(std::is_same<decltype(+test), ArithmeticTest>::value, "");
+	static_assert(std::is_same<decltype(test - 3), ArithmeticTest>::value, "");
+	static_assert(std::is_same<decltype(2 - test), ArithmeticTest>::value, "");
+	static_assert(std::is_same<decltype(test * 6), ArithmeticTest>::value, "");
+	static_assert(std::is_same<decltype(-3 * test), ArithmeticTest>::value, "");
+	static_assert(std::is_same<decltype(test / 2), ArithmeticTest>::value, "");
+	static_assert(std::is_same<decltype(aob + 1), ArithmeticOpBase>::value, "");
+	static_assert(std::is_same<decltype(1 + aob), ArithmeticOpBase>::value, "");
+	static_assert(std::is_same<decltype(-aob), ArithmeticOpBase>::value, "");
+	static_assert(std::is_same<decltype(+aob), ArithmeticOpBase>::value, "");
+	static_assert(std::is_same<decltype(aob - 3), ArithmeticOpBase>::value, "");
+	static_assert(std::is_same<decltype(2 - aob), ArithmeticOpBase>::value, "");
+	static_assert(std::is_same<decltype(aob * 6), ArithmeticOpBase>::value, "");
+	static_assert(std::is_same<decltype(-3 * aob), ArithmeticOpBase>::value, "");
+	static_assert(std::is_same<decltype(aob / 2), ArithmeticOpBase>::value, "");
+	assert(test.value == 4);
+	assert(aob.value == 4);
+	assert((test + 1).value == 5);
+	assert((1 + test).value == 5);
+	assert((test - 1).value == 3);
+	assert((1 - test).value == -3);
+	assert((test * 2).value == 8);
+	assert((2 * test).value == 8);
+	assert((test / 2).value == 2);
+//	assert((4 / test).value == 1); not implemented
+	assert((aob + 1).value == 5);
+	assert((1 + aob).value == 5);
+	assert((aob - 1).value == 3);
+	assert((1 - aob).value == -3);
+	assert((aob * 2).value == 8);
+	assert((2 * aob).value == 8);
+	assert((aob / 2).value == 2);
+}
+
 #ifdef PTY_TEST_INCLUDE_ALL_TESTS
 void test_arithmetic() {
 #else
@@ -109,7 +147,6 @@ int main() {
 	assert((aob / 2).value == 4);
 	assert((aob /= 2).value == 4);
 
-//*
 	static_assert(std::is_same<decltype(aob + 1), ArithmeticOpBase>::value, "");
 	static_assert(std::is_same<decltype(1 + aob), ArithmeticOpBase>::value, "");
 	static_assert(std::is_same<decltype(aob += 5), ArithmeticOpBase&>::value, "");
@@ -123,7 +160,8 @@ int main() {
 	static_assert(std::is_same<decltype(aob *= 2), ArithmeticOpBase&>::value, "");
 	static_assert(std::is_same<decltype(aob / 2), ArithmeticOpBase>::value, "");
 	static_assert(std::is_same<decltype(aob /= 2), ArithmeticOpBase&>::value, "");
-//	*/
+	test_constant_arithmetic(test, t, aob);
+
 	std::cout << "Test `arithmetic` passed with success" << std::endl;
 
 #ifndef PTY_TEST_INCLUDE_ALL_TESTS
