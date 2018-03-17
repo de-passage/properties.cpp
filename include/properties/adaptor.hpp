@@ -10,7 +10,7 @@ namespace pty {
 		struct adaptor {
 			P* self;
 
-			explicit adaptor(P* p) : self(p) {}
+			constexpr explicit adaptor(P* p) : self(p) {}
 
 
 			template<class Op, class ...Operand>

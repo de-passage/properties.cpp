@@ -5,20 +5,22 @@
 #include "properties/details/incrementation_operation_macro.hpp"
 
 
-#define PTY_DETAILS_DEFINE_POSTINCREMENT_OPERATION(op, name)\
-		struct name {\
+#define PTY_DETAILS_DEFINE_POSTINCREMENT_OPERATION(op, sym)\
+		struct sym {\
 			template<class T>\
 			inline constexpr T operator()(T& obj) const {\
 				return obj op; \
 			}	\
+			static constexpr const char* const name = "operator_"#sym "(" #op ")"; \
 		}; \
 
-#define PTY_DETAILS_DEFINE_PREINCREMENT_OPERATION(op, name)\
-		struct name {\
+#define PTY_DETAILS_DEFINE_PREINCREMENT_OPERATION(op, sym)\
+		struct sym {\
 			template<class T>\
 			inline constexpr T& operator()(T& obj) const {\
 				return op obj; \
 			}	\
+			static constexpr const char* const name = "operator_"#sym "(" #op ")"; \
 		}; \
 
 namespace pty {

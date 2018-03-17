@@ -15,7 +15,7 @@
 #include "../test/property_hierarchy_info.hpp"
 #include "../test/iterable.hpp"
 #include "../test/has_operator_base_overload.hpp"
-#include "../test/printable_operations.hpp"
+#include "../test/include/printable_operations.hpp"
 
 int main() {
 	test_assignable();

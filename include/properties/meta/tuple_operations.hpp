@@ -78,7 +78,32 @@ namespace pty {
 			struct contains_t<A, tuple<>> {
 				constexpr static const bool value = false;
 			};
+
+		/*
+		 * Flatten recursively all nested meta::tuple 
+		 */
 				
+		template<class ...Args>
+			struct flatten_t;
+
+		template<class ...A1, class ...A2>
+			struct flatten_t<pty::meta::tuple<A1...>, A2...> {
+				typedef typename flatten_t<A1..., A2...>::value value;
+			};
+
+		template<class T, class ...A>
+			struct flatten_t<T, A...> {
+				typedef concat<tuple<T>, typename flatten_t<A...>::value> value;
+			};
+
+		template<>
+		struct flatten_t<> {
+			typedef pty::meta::tuple<> value;
+		};
+
+		template<class...Args>
+			using flatten = typename flatten_t<Args...>::value;
+
 	}
 }
 

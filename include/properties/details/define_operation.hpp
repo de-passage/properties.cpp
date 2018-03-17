@@ -10,7 +10,7 @@
 			inline constexpr decltype(auto) operator ()(T&& obj) const { \
 				return op(obj);	\
 			}	\
-			static constexpr const char* const name = #sym; \
+			static constexpr const char* const name = "operator_"#sym "(" #op ")"; \
 		}; \
 
 

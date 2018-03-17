@@ -5,6 +5,8 @@
 struct A;
 struct B;
 
+void bar(A&) {}
+
 #ifdef PTY_TEST_INCLUDE_ALL_TESTS
 void test_tuple_operations() {
 #else
@@ -21,6 +23,7 @@ int main() {
 	static_assert(pty::meta::contains<A, pty::meta::tuple<A, B>>, "contains should find elements on 1st place");
 	static_assert(pty::meta::contains<B, pty::meta::tuple<A, B>>, "contains should find elements on any place");
 	static_assert(!pty::meta::contains<B, T3>, "contains should not find non existent elements");
+	static_assert(pty::meta::is_same<pty::meta::flatten<pty::meta::tuple<pty::meta::tuple<A, B>, pty::meta::tuple<B, A>>>, pty::meta::tuple<A, B, B, A>>, "");
 
 #ifndef PTY_TEST_INCLUDE_ALL_TESTS
 	return 0;

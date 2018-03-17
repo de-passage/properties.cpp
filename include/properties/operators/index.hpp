@@ -13,6 +13,7 @@ namespace pty {
 			constexpr inline decltype(auto) operator()(T&& obj, I&& index) const {
 				return obj[std::forward<I>(index)];
 			}
+			constexpr static const char* const name = "operator_index([])";
 		};
 
 		struct dereference {
@@ -20,6 +21,7 @@ namespace pty {
 				constexpr inline decltype(auto) operator()(T&& obj) const {
 					return *obj;
 				}
+			constexpr static const char* const name = "operator_dereference(*)";
 		};
 
 		struct dereference_member {
@@ -27,6 +29,7 @@ namespace pty {
 				constexpr inline decltype(auto) operator()(T* obj) const {
 					return obj;
 				}
+			constexpr static const char* const name = "operator_dereference_member(->)";
 		};
 
 		typedef pty::meta::tuple<index, dereference, dereference_member> address;

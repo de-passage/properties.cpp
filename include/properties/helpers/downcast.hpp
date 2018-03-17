@@ -33,7 +33,7 @@ namespace pty {
 
 
   template<class P>
-    auto downcast(P* that) {
+    constexpr auto downcast(P* that) {
       return adaptor<typename details::_down<P>::value>(static_cast<typename details::_down<P>::value*>(that));
     }
 }

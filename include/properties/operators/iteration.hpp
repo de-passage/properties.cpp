@@ -10,6 +10,8 @@ namespace pty {
 			constexpr inline decltype(auto) operator()(T&& iterator, U&& offset) const {
 				return iterator + offset;
 			}
+
+			static constexpr const char* const name = "operator_offset_iterator";
 		};
 
 		struct increment_iterator {
@@ -17,6 +19,7 @@ namespace pty {
 			constexpr inline decltype(auto) operator()(T&& iterator) const {
 				return ++iterator;
 			}
+			static constexpr const char* const name = "operator_increment_iterator";
 		};
 
 		struct decrement_iterator {
@@ -24,6 +27,7 @@ namespace pty {
 			constexpr inline decltype(auto) operator()(T&& iterator) const {
 				return --iterator;
 			}
+			static constexpr const char* const name = "operator_decrement_iterator";
 		};
 
 		struct iteration_start {
@@ -31,6 +35,7 @@ namespace pty {
 				constexpr inline decltype(auto) operator()(U&& iterable) const {
 					return iterable.begin();
 				}
+			static constexpr const char* const name = "operator_iteration_start";
 		};
 
 		struct iteration_end {
@@ -38,6 +43,7 @@ namespace pty {
 				constexpr inline decltype(auto) operator()(U&& iterable) const {
 					return iterable.end();
 				}
+			static constexpr const char* const name = "operator_iteration_end";
 		};
 
 		struct compare_iterators {
@@ -45,6 +51,7 @@ namespace pty {
 				constexpr inline decltype(auto) operator()(Op op, U&& lhv, U&& rhv) const {
 					return op(lhv, rhv);
 				}
+			static constexpr const char* const name = "operator_compare_iterators";
 		};
 
 		struct dereference_iterator {
@@ -52,6 +59,7 @@ namespace pty {
 				constexpr inline decltype(auto) operator()(T&& iterator) const {
 					return *iterator;
 				}
+			static constexpr const char* const name = "operator_dereference_iterators";
 		};
 
 		typedef pty::meta::tuple<offset_iterator, increment_iterator, decrement_iterator, dereference_iterator, compare_iterators, iteration_end, iteration_start> iteration;

@@ -121,13 +121,13 @@ class Vector : public BASE{
 	constexpr Vector() : _array(nullptr) {}
 
 	constexpr inline void push_back(T&& t) {
-        std::cout << " push_back before" << size << " " << capacity << std::endl;
+        //std::cout << " push_back before" << size << " " << capacity << std::endl;
 		if(size == capacity) {
 			capacity = (capacity + 1) * 2;
 		}
         auto tmp = size++;
 		_array[tmp] = std::forward<T>(t);
-        std::cout << " push_back after" << size << " " << capacity << std::endl;
+        //std::cout << " push_back after" << size << " " << capacity << std::endl;
 	}
 
 	constexpr inline T&& pop_back() {
@@ -183,7 +183,7 @@ class Vector : public BASE{
 	PTY_FORWARD_OPERATOR_BASE(Base)
 
 	constexpr inline void operator_base(const size_change&, size_t s) {
-      std::cout << " size changed " << s << std::endl << std::flush;
+      //std::cout << " size changed " << s << std::endl << std::flush;
 		if(s > capacity) {
 			_resize(s);
 			Base::set_capacity(s);
@@ -191,7 +191,7 @@ class Vector : public BASE{
 	}
 
 	constexpr inline void operator_base(const capacity_change&, size_t c) {
-      std::cout << " capacity changed " << c << std::endl << std::flush;
+      //std::cout << " capacity changed " << c << std::endl << std::flush;
 		if(c < size) {
 			Base::set_size(c);
 		}
@@ -206,7 +206,7 @@ class Vector : public BASE{
 	constexpr void _resize(size_t s) {
 		T* newArray = new T[s];
 
-        std::cout << " Resized " << s << std::endl << std::flush;
+        //std::cout << " Resized " << s << std::endl << std::flush;
 
 		if(_array != nullptr) {
 			size_t max_index = dpsg::max(size, s, capacity);
@@ -278,7 +278,7 @@ int main() {
 	assert(v[-2] == 42);
 	assert(v[-3] == 8);
 	assert(v[-4] == -42);
-    std::cout << "Done with v<int>" << std::endl << std::flush;
+    //std::cout << "Done with v<int>" << std::endl << std::flush;
 
 	Vector<UniqueStruct> v2;
 	UniqueStruct u(17);

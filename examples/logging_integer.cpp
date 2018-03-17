@@ -36,10 +36,12 @@ struct Int :
 	// Ctor
 	constexpr Int(int v) : value(v) {}
 
+	using Base = pty::Properties<Int, pty::Numeric, pty::Streamable>;
+	using Base::operator=; // Required to enable default assignment behavior.
+
 	protected:
 
 	int value;
-	using Base = pty::Properties<Int, pty::Numeric, pty::Streamable>;
 
 	// Without these, the framework can't access private functions and the next declarations would need to be public
 	friend pty::adaptor<Int>;
@@ -73,16 +75,21 @@ struct Int :
 
 int main() {
 	Int i(42);
-	std::cout << i << std::endl; // print "operator_stream_out(<<)(std::ostream) called" then "42" 
-	//int error = i + 10; // error no viable conversion from Int to int. 
+	std::cout << i << std::endl; // prints "operator_stream_out(<<)(std::ostream) called" then "42" 
+	// int error = i + 10; // error no viable conversion from Int to int. 
 	
-	std::cout << i + 10 << std::endl; // Print "operator_plus(+)(10) called", "operator_stream_out(<<)(std::ostream) called", then 52
+	std::cout << i + 10 << std::endl; // Prints "operator_plus(+)(10) called", "operator_stream_out(<<)(std::ostream) called", then 52
 
-	std::cout << i * 2 << std::endl;
+	std::cout << i * 2 << std::endl; // Prints "operator_plus(*)(2) called", "operator_stream_out(<<)(std::ostream) called", then 84
 
-	std::cout << std::boolalpha << (i >= 0) << std::endl;
+	std::cout << std::boolalpha << (i >= 0) << std::endl; // Prints "operator_greater_equal(>=)(0) called" then true
 
-	i = 9;
+	i = 9; // Prints "operator_assign(=)(9)
+
+	// Operations return an object of the custom class 
+	// so we can safely chain them and get the expected result 
+	// (in this case it will print the addition then the comparison)
+	std::cout << (i + 1 == 10) << std::endl;
 
 	return 0;
 }

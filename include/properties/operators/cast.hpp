@@ -7,6 +7,7 @@ namespace pty {
 			constexpr Ret operator()(const In& obj) const {
 				return static_cast<Ret>(obj);
 			}
+			constexpr static const char* const name = "operator_cast";
 		};
 	}
 }
