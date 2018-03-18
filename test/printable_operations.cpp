@@ -61,7 +61,7 @@ auto make_tuple(pty::meta::tuple<T...>) {
 	return std::make_tuple(T()...);
 }
 
-#ifdef TEST_PRINTABLE_OPERATORS
+#ifdef PTY_TEST_INCLUDE_ALL_TESTS
 void test_printable_operations() {
 #else
 int main() {
@@ -83,7 +83,7 @@ int main() {
 
 	std::cout << "Test `printable operations` passed with success" << std::endl;
 
-#ifndef TEST_PRINTABLE_OPERATORS
+#ifndef PTY_TEST_INCLUDE_ALL_TESTS
 	return 0;
 #endif
 }
