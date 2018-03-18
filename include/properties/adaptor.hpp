@@ -3,6 +3,8 @@
 
 #include <utility>
 
+#include "properties/meta.hpp"
+
 
 namespace pty {
 
@@ -23,17 +25,11 @@ namespace pty {
 					return self->operator_base(op, std::forward<Operand>(oper)...);
 				}
 
-			/*
-			template<class Op>
-				inline constexpr decltype(auto) operator_base(const Op& op) const { 
-					return self->operator_base(op);
+			public:
+			template<class ...Args>
+				inline constexpr bool check_overload(Args&&... args) {
+					return self->check_overload(args...);
 				}
-
-			template<class Op>
-				inline constexpr decltype(auto) operator_base(const Op& op) { 
-					return self->operator_base(op);
-				}
-				*/
 
 		};
 }

@@ -36,5 +36,6 @@ namespace pty {
     constexpr auto downcast(P* that) {
       return adaptor<typename details::_down<P>::value>(static_cast<typename details::_down<P>::value*>(that));
     }
+
 }
 #endif// GUARD_PTY_DOWNCAST_HPP__

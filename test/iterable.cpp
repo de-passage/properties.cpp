@@ -14,6 +14,7 @@ struct MyList : pty::Properties<MyList<T>, pty::Iterable>{
 	using Base = pty::Properties<MyList<T>, pty::Iterable>;
 	using typename Base::iterator;
 	using typename Base::const_iterator;
+
 	struct Node {
 		T value;
 		Node* next = nullptr;
