@@ -30,6 +30,10 @@ struct Int :
 	friend pty::adaptor<Int>;
 	friend pty::adaptor<const Int>;
 
+	// This line is required when only an operators::cast version is defined. See the next example for a peek at what it
+	// would look like if written by hand
+	PTY_FORWARD_OPERATOR_BASE(Base)
+
 	// This part exposes our member to the framework, essentially replacing our class
 	// by the return value of this function every time an operator is called
 	constexpr inline int& operator_base(const pty::operators::cast&) {
@@ -147,4 +151,7 @@ int main() {
 	return 0;
 }
 ```
-More example and documentations to come. For now please refer to the tests for examples of how to use the framework
+
+## Documentation
+
+Documentation for the framework can be generated using [doxygen](http://www.doxygen.org). The documentation is a work in progress, even more than the framework.

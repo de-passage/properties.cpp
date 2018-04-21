@@ -43,7 +43,9 @@ namespace pty {
 				};
 		}
 
+
 		using stream_in = details::stream_adaptor<details::stream_in>;
+
 		using stream_out = details::stream_adaptor<details::stream_out>;
 
 

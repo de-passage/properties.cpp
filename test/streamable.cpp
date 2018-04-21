@@ -1,9 +1,11 @@
 #include <properties.hpp>
 #include <properties/streamable.hpp>
+#include <properties/bitwise.hpp>
 
 #include <cassert>
 
 #include <iostream>
+
 
 
 struct StreamTest : pty::Properties<StreamTest, pty::Streamable> {
@@ -80,6 +82,25 @@ struct storage_stream {
 	}
 };
 
+#define BASE pty::Properties<PreventCollision, pty::Streamable, pty::Bitwise>
+struct PreventCollision : BASE {
+	typedef BASE Base;
+#undef BASE
+	PTY_FORWARD_OPERATOR_BASE(Base)
+
+	int value;
+
+	constexpr PreventCollision(int i) : value(i) {}
+
+	inline constexpr int operator_base(pty::operators::cast) const {
+		return value;
+	}
+
+	inline constexpr int& operator_base(pty::operators::cast) {
+		return value;
+	}
+};
+
 
 #ifdef PTY_TEST_INCLUDE_ALL_TESTS
 void test_streamable() {
@@ -119,6 +140,11 @@ int main() {
 	std::cin >> s;
 	std::cout << s << std::endl;
 	//*/
+	
+	PreventCollision collision(1);
+	assert((collision << 1).value == 2);
+	ss << collision;
+	assert(ss.value == 1);
 
 	std::cout << "Test `streamable` passed with success" << std::endl;
 #ifndef PTY_TEST_INCLUDE_ALL_TESTS

@@ -40,18 +40,24 @@ namespace pty {
 
 		}
 
-		/// enable_if< bool cond>
-		// Undefined if cond is false
+		/** \typedef pty::meta::enable_if
+		 *  \brief Metafunction that is undefined if the boolean parameter is false.
+		 *  
+		 *  Equivalent to std::enable_if_t, with two less characters.
+		 */
 		template<bool B, class T = details::placeholder>
 			using enable_if = typename details::enable_if_t<B, T>::type;
 
-		/// OR< bool... cond>
-		// Is true if one of the conditions is true, false otherwise
+		/** \var pty::meta::OR
+		 *  \brief Is true if one of the conditions is true, false otherwise
+		 *  Equivalent to (Args || ...) in C++17
+		 */
 		template<bool... T>
 			constexpr static const bool OR = details::OR_t<T...>::value;
 
-		// is_same<typename lht, typename rht>
-		// Is true if lht and rht are the exact same type, false otherwise
+		/** \var pty::meta::is_same
+		 *  \brief Is true if both parameters are the exact same type, false otherwise
+		 */
 		template<class T, class U>
 			constexpr static const bool is_same = details::is_same_t<T, U>::value;
 	}
